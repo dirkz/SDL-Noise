@@ -7,11 +7,15 @@
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-    sdl::SetAppMetadata("SDL-Noise", "0.0.1", "com.dirkz.samples.sdl.noise");
-    sdl::Init(SDL_INIT_VIDEO);
-
-    AppState *appState = new AppState();
-    *appstate = appState;
+    try
+    {
+        AppState *appState = new AppState();
+        *appstate = appState;
+    }
+    catch (...)
+    {
+        return SDL_APP_FAILURE;
+    }
 
     return SDL_APP_CONTINUE;
 }
