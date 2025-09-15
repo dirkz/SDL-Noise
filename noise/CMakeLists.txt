@@ -1,6 +1,6 @@
 add_library(noise OBJECT
-	Noise.h
-	Noise.cpp
+	"Perlin.h"
+	"Perlin.cpp"
  )
 
  if (CMAKE_VERSION VERSION_GREATER 3.12)
