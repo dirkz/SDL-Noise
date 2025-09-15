@@ -27,3 +27,5 @@ add_subdirectory(noise)
 
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM noise)
 
+target_link_libraries(${PROJECT_NAME} SDL-Hpp noise)
+
