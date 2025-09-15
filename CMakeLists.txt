@@ -12,10 +12,15 @@ endif()
 project ("Noise")
 
 # Add source to this project's executable.
-add_executable (Noise "main.cpp" )
+add_executable (Noise "main.cpp"  "noise/Noise.cpp" "noise/Noise.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Noise PROPERTY CXX_STANDARD 20)
 endif()
 
 # TODO: Add tests and install targets if needed.
+
+option(SDL_STATIC "Build SDL as a static library" ON)
+
+add_subdirectory(SDL-Hpp EXCLUDE_FROM_ALL)
+add_subdirectory(noise)
