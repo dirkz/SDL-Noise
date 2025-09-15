@@ -32,6 +32,17 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
+    AppState *appState = reinterpret_cast<AppState *>(appstate);
+
+    try
+    {
+        appState->Iterate();
+    }
+    catch (...)
+    {
+        return SDL_APP_FAILURE;
+    }
+
     return SDL_APP_CONTINUE;
 }
 
