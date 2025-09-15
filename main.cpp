@@ -1,13 +1,13 @@
-﻿#define SDL_MAIN_USE_CALLBACKS 1
+﻿#include "stdafx.h"
 
-#include <SDL3/SDL.h>
+#define SDL_MAIN_USE_CALLBACKS 1
 #include <SDL3/SDL_main.h>
-
-#include "Noise.h"
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-    SDL_Log("SDL_AppInit");
+    sdl::SetAppMetadata("SDL-Noise", "0.0.1", "com.dirkz.samples.sdl.noise");
+    sdl::Init(SDL_INIT_VIDEO);
+
     return SDL_APP_CONTINUE;
 }
 
