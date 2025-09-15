@@ -24,3 +24,6 @@ option(SDL_STATIC "Build SDL as a static library" ON)
 
 add_subdirectory(SDL-Hpp EXCLUDE_FROM_ALL)
 add_subdirectory(noise)
+
+target_precompile_headers(${PROJECT_NAME} REUSE_FROM noise)
+
