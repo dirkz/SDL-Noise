@@ -83,6 +83,11 @@ void Perlin::InitGradients()
     m_gradients[13] = XMVectorSet(-1, 1, 0, 0);
     m_gradients[14] = XMVectorSet(0, -1, 1, 0);
     m_gradients[15] = XMVectorSet(0, -1, -1, 0);
+
+    for (int i = 0; i < m_gradients.size(); ++i)
+    {
+        m_gradients[i] = XMVector3Normalize(m_gradients[i]);
+    }
 }
 
 DirectX::XMVECTOR Perlin::Gradient(int i)
