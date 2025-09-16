@@ -38,7 +38,7 @@ void AppState::CreateTexture()
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            float n = m_perlinNoise.Noise(x, y, 0.5f);
+            float n = m_perlinNoise.Noise(x, -y, 0.5f);
         }
     }
 }

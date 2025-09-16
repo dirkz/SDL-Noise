@@ -9,7 +9,7 @@ struct Perlin
         return x * x * x * (x * (6 * x - 15) + 10);
     }
 
-    template <class T> T lerp(T a, T b, T t)
+    template <class T> T lerp(T t, T a, T b)
     {
         return a + t * b;
     }
