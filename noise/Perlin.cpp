@@ -16,5 +16,9 @@ float Perlin::Noise(float x, float y, float z)
     float v = yAbs - y0;
     float w = zAbs - z0;
 
+    float uSmooth = Fade(u);
+    float vSmooth = Fade(v);
+    float wSmooth = Fade(w);
+
     return 0.f;
 }
