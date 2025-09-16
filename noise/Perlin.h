@@ -2,6 +2,7 @@
 
 struct Perlin
 {
+    Perlin();
 
     template <class T> T Fade(T x)
     {
@@ -17,5 +18,8 @@ struct Perlin
     float Noise(float x, float y, float z);
 
   private:
+    void InitGradients();
     int Hash(int x, int y, int z);
+
+    std::array<DirectX::XMVECTOR, 16> m_gradients;
 };

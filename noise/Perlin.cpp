@@ -1,5 +1,7 @@
 #include "Perlin.h"
 
+using namespace DirectX;
+
 constexpr int GridLength = 256;
 
 constexpr std::array<int, 512> Permutations{
@@ -33,6 +35,11 @@ constexpr std::array<int, 512> Permutations{
     141, 128, 195, 78,  66,  215, 61,  156, 180, // mirror of first 256
 };
 
+Perlin::Perlin()
+{
+    InitGradients();
+}
+
 float Perlin::Noise(float x, float y, float z)
 {
     float xAbs = std::abs(x);
@@ -52,6 +59,30 @@ float Perlin::Noise(float x, float y, float z)
     float wSmooth = Fade(w);
 
     return 0.f;
+}
+
+void Perlin::InitGradients()
+{
+    constexpr std::array<float, 2> values{+1.f, -1.f};
+    constexpr float w = 1.f;
+
+    int index = 0;
+
+    for (const auto v1 : values)
+    {
+        for (const auto v2 : values)
+        {
+            m_gradients[index++] = XMVectorSet(0, v1, v2, w);
+            m_gradients[index++] = XMVectorSet(v1, 0, v2, w);
+            m_gradients[index++] = XMVectorSet(v1, v2, 0, w);
+        }
+    }
+
+    // repeat some gradients
+    m_gradients[12] = XMVectorSet(1, 1, 0, 0);
+    m_gradients[13] = XMVectorSet(-1, 1, 0, 0);
+    m_gradients[14] = XMVectorSet(0, -1, 1, 0);
+    m_gradients[15] = XMVectorSet(0, -1, -1, 0);
 }
 
 int Perlin::Hash(int x, int y, int z)
