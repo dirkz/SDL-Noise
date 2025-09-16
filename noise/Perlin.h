@@ -15,4 +15,7 @@ struct Perlin
     }
 
     float Noise(float x, float y, float z);
+
+  private:
+    int Hash(int x, int y, int z);
 };
