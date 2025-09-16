@@ -51,9 +51,12 @@ float Perlin::Noise(float x, float y, float z)
     int y0 = static_cast<int>(yAbs) % GridLength;
     int z0 = static_cast<int>(zAbs) % GridLength;
 
-    // constant w for building vectors
+    // constant w for building homogenous vectors
     constexpr int iw1 = 1;
     constexpr float fw1 = 1.f;
+
+    // vector to our point inside the unit cube
+    XMVECTOR vXYZ = XMVectorSet(xAbs, yAbs, zAbs, fw1);
 
     // vectors pointing to the corners of the unit cube
     XMVECTOR v000 = XMVectorSetInt(x0, y0, z0, iw1);
@@ -65,7 +68,7 @@ float Perlin::Noise(float x, float y, float z)
     XMVECTOR v110 = XMVectorSetInt(x0 + 1, y0 + 1, z0, iw1);
     XMVECTOR v111 = XMVectorSetInt(x0 + 1, y0 + 1, z0 + 1, iw1);
 
-    // relative coordinates of our actual point
+    // relative coordinates of our point inside the unit cube
     float u = xAbs - x0;
     float v = yAbs - y0;
     float w = zAbs - z0;
@@ -74,9 +77,6 @@ float Perlin::Noise(float x, float y, float z)
     float uSmooth = Fade(u);
     float vSmooth = Fade(v);
     float wSmooth = Fade(w);
-
-    // vector to our point inside the unit cube
-    XMVECTOR xyz = XMVectorAdd(XMVectorSet(u, v, w, fw1), v000);
 
     return 0.f;
 }
