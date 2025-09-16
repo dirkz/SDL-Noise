@@ -11,6 +11,8 @@ struct AppState
     void Iterate();
 
   private:
+    void CreateTexture();
+
     SDL_Window *m_window = nullptr;
     SDL_Renderer *m_renderer = nullptr;
     Perlin m_perlinNoise;
