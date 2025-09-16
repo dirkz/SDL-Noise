@@ -51,17 +51,19 @@ float Perlin::Noise(float x, float y, float z)
     int y0 = static_cast<int>(yAbs) % GridLength;
     int z0 = static_cast<int>(zAbs) % GridLength;
 
-    constexpr int w1 = 1;
+    // constant w for building vectors
+    constexpr int iw1 = 1;
+    constexpr float fw1 = 1.f;
 
     // vectors pointing to the corners of the unit cube
-    XMVECTOR v000 = XMVectorSetInt(x0, y0, z0, w1);
-    XMVECTOR v001 = XMVectorSetInt(x0, y0, z0 + 1, w1);
-    XMVECTOR v010 = XMVectorSetInt(x0, y0 + 1, z0, w1);
-    XMVECTOR v011 = XMVectorSetInt(x0, y0 + 1, z0 + 1, w1);
-    XMVECTOR v100 = XMVectorSetInt(x0 + 1, y0, z0, w1);
-    XMVECTOR v101 = XMVectorSetInt(x0 + 1, y0, z0 + 1, w1);
-    XMVECTOR v110 = XMVectorSetInt(x0 + 1, y0 + 1, z0, w1);
-    XMVECTOR v111 = XMVectorSetInt(x0 + 1, y0 + 1, z0 + 1, w1);
+    XMVECTOR v000 = XMVectorSetInt(x0, y0, z0, iw1);
+    XMVECTOR v001 = XMVectorSetInt(x0, y0, z0 + 1, iw1);
+    XMVECTOR v010 = XMVectorSetInt(x0, y0 + 1, z0, iw1);
+    XMVECTOR v011 = XMVectorSetInt(x0, y0 + 1, z0 + 1, iw1);
+    XMVECTOR v100 = XMVectorSetInt(x0 + 1, y0, z0, iw1);
+    XMVECTOR v101 = XMVectorSetInt(x0 + 1, y0, z0 + 1, iw1);
+    XMVECTOR v110 = XMVectorSetInt(x0 + 1, y0 + 1, z0, iw1);
+    XMVECTOR v111 = XMVectorSetInt(x0 + 1, y0 + 1, z0 + 1, iw1);
 
     // relative coordinates of our actual point
     float u = xAbs - x0;
@@ -72,6 +74,9 @@ float Perlin::Noise(float x, float y, float z)
     float uSmooth = Fade(u);
     float vSmooth = Fade(v);
     float wSmooth = Fade(w);
+
+    // vector to our point inside the unit cube
+    XMVECTOR xyz = XMVectorAdd(XMVectorSet(u, v, w, fw1), v000);
 
     return 0.f;
 }
