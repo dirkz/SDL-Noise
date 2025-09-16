@@ -46,14 +46,29 @@ float Perlin::Noise(float x, float y, float z)
     float yAbs = std::abs(y);
     float zAbs = std::abs(z);
 
+    // grid coordinates
     int x0 = static_cast<int>(xAbs) % GridLength;
     int y0 = static_cast<int>(yAbs) % GridLength;
     int z0 = static_cast<int>(zAbs) % GridLength;
 
+    constexpr int w1 = 1;
+
+    // vectors pointing to the corners of the unit cube
+    XMVECTOR v000 = XMVectorSetInt(x0, y0, z0, w1);
+    XMVECTOR v001 = XMVectorSetInt(x0, y0, z0 + 1, w1);
+    XMVECTOR v010 = XMVectorSetInt(x0, y0 + 1, z0, w1);
+    XMVECTOR v011 = XMVectorSetInt(x0, y0 + 1, z0 + 1, w1);
+    XMVECTOR v100 = XMVectorSetInt(x0 + 1, y0, z0, w1);
+    XMVECTOR v101 = XMVectorSetInt(x0 + 1, y0, z0 + 1, w1);
+    XMVECTOR v110 = XMVectorSetInt(x0 + 1, y0 + 1, z0, w1);
+    XMVECTOR v111 = XMVectorSetInt(x0 + 1, y0 + 1, z0 + 1, w1);
+
+    // relative coordinates of our actual point
     float u = xAbs - x0;
     float v = yAbs - y0;
     float w = zAbs - z0;
 
+    // smooth the relative coordinates
     float uSmooth = Fade(u);
     float vSmooth = Fade(v);
     float wSmooth = Fade(w);
