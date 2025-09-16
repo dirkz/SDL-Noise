@@ -68,6 +68,36 @@ float Perlin::Noise(float x, float y, float z)
     XMVECTOR v110 = XMVectorSetInt(x0 + 1, y0 + 1, z0, iw1);
     XMVECTOR v111 = XMVectorSetInt(x0 + 1, y0 + 1, z0 + 1, iw1);
 
+    // vectors from the corners of the unit cube to our point inside
+    v000 = XMVectorSubtract(vXYZ, v000);
+    v001 = XMVectorSubtract(vXYZ, v001);
+    v010 = XMVectorSubtract(vXYZ, v010);
+    v011 = XMVectorSubtract(vXYZ, v011);
+    v100 = XMVectorSubtract(vXYZ, v100);
+    v101 = XMVectorSubtract(vXYZ, v101);
+    v110 = XMVectorSubtract(vXYZ, v110);
+    v111 = XMVectorSubtract(vXYZ, v111);
+
+    // normalize those vectors
+    v000 = XMVector3Normalize(v000);
+    v001 = XMVector3Normalize(v001);
+    v010 = XMVector3Normalize(v010);
+    v011 = XMVector3Normalize(v011);
+    v100 = XMVector3Normalize(v100);
+    v101 = XMVector3Normalize(v101);
+    v110 = XMVector3Normalize(v110);
+    v111 = XMVector3Normalize(v111);
+
+    // dot products
+    float d000 = XMVectorGetX(XMVector3Dot(v000, vXYZ));
+    float d001 = XMVectorGetX(XMVector3Dot(v001, vXYZ));
+    float d010 = XMVectorGetX(XMVector3Dot(v010, vXYZ));
+    float d011 = XMVectorGetX(XMVector3Dot(v011, vXYZ));
+    float d100 = XMVectorGetX(XMVector3Dot(v100, vXYZ));
+    float d101 = XMVectorGetX(XMVector3Dot(v101, vXYZ));
+    float d110 = XMVectorGetX(XMVector3Dot(v110, vXYZ));
+    float d111 = XMVectorGetX(XMVector3Dot(v111, vXYZ));
+
     // relative coordinates of our point inside the unit cube
     float u = xAbs - x0;
     float v = yAbs - y0;
