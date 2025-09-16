@@ -6,4 +6,5 @@
 #include <SDL.hpp>
 #include <SDL3/SDL.h>
 
+#include <array>
 #include <cmath>
