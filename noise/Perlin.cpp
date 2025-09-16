@@ -85,6 +85,11 @@ void Perlin::InitGradients()
     m_gradients[15] = XMVectorSet(0, -1, -1, 0);
 }
 
+DirectX::XMVECTOR Perlin::Gradient(int i)
+{
+    return m_gradients[i];
+}
+
 int Perlin::Hash(int x, int y, int z)
 {
     size_t indexXY = Permutations[x] + static_cast<size_t>(y);
