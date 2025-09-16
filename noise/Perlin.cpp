@@ -56,7 +56,7 @@ float Perlin::Noise(float x, float y, float z)
 
 int Perlin::Hash(int x, int y, int z)
 {
-    size_t index1 = Permutations[x] + static_cast<size_t>(y);
-    size_t index2 = Permutations[index1 + z];
-    return Permutations[index2];
+    size_t indexXY = Permutations[x] + static_cast<size_t>(y);
+    size_t indexXYZ = Permutations[indexXY + z];
+    return Permutations[indexXYZ];
 }
