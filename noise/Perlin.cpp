@@ -6,6 +6,7 @@ static const XMVECTOR V15 = XMVectorReplicate(15.f);
 static const XMVECTOR V10 = XMVectorReplicate(10.f);
 
 // 6x^5 - 15x^4 + 10^3
+// x * x * x * (x * (6 * x - 15) + 10)
 static inline XMVECTOR Fade(FXMVECTOR v)
 {
     XMVECTOR vv = XMVectorScale(v, 6.f);
