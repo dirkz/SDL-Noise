@@ -152,6 +152,14 @@ float Perlin::Noise(float x, float y, float z)
     XMVECTOR d110 = XMVector3Dot(g110, v110);
     XMVECTOR d111 = XMVector3Dot(g111, v111);
 
+    vUVW = Fade(vUVW);
+
+    XMVECTOR n000_100 = Lerp(vUVW, d000, d100);
+    XMVECTOR n010_110 = Lerp(vUVW, d010, d110);
+
+    XMVECTOR n001_101 = Lerp(vUVW, d001, d101);
+    XMVECTOR n011_111 = Lerp(vUVW, d011, d111);
+
     return 0.f;
 }
 
