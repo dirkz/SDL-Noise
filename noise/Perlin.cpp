@@ -143,24 +143,45 @@ float Perlin::Noise(float x, float y, float z)
     XMVECTOR g110 = GradientAt(gx + 1, gy + 1, gz);
     XMVECTOR g111 = GradientAt(gx + 1, gy + 1, gz + 1);
 
-    XMVECTOR d000 = XMVector3Dot(g000, v000);
-    XMVECTOR d001 = XMVector3Dot(g001, v001);
-    XMVECTOR d010 = XMVector3Dot(g010, v010);
-    XMVECTOR d011 = XMVector3Dot(g011, v011);
-    XMVECTOR d100 = XMVector3Dot(g100, v100);
-    XMVECTOR d101 = XMVector3Dot(g101, v101);
-    XMVECTOR d110 = XMVector3Dot(g110, v110);
-    XMVECTOR d111 = XMVector3Dot(g111, v111);
+    XMVECTOR vd000 = XMVector3Dot(g000, v000);
+    XMVECTOR vd001 = XMVector3Dot(g001, v001);
+    XMVECTOR vd010 = XMVector3Dot(g010, v010);
+    XMVECTOR vd011 = XMVector3Dot(g011, v011);
+    XMVECTOR vd100 = XMVector3Dot(g100, v100);
+    XMVECTOR vd101 = XMVector3Dot(g101, v101);
+    XMVECTOR vd110 = XMVector3Dot(g110, v110);
+    XMVECTOR vd111 = XMVector3Dot(g111, v111);
+
+    float d000 = XMVectorGetX(vd000);
+    float d001 = XMVectorGetX(vd001);
+    float d010 = XMVectorGetX(vd010);
+    float d011 = XMVectorGetX(vd011);
+    float d100 = XMVectorGetX(vd100);
+    float d101 = XMVectorGetX(vd101);
+    float d110 = XMVectorGetX(vd110);
+    float d111 = XMVectorGetX(vd111);
 
     vUVW = Fade(vUVW);
+    XMFLOAT3 floatsUVW;
+    XMStoreFloat3(&floatsUVW, vUVW);
 
-    XMVECTOR n000_100 = Lerp(vUVW, d000, d100);
-    XMVECTOR n010_110 = Lerp(vUVW, d010, d110);
+    float u = floatsUVW.x;
+    float v = floatsUVW.y;
+    float w = floatsUVW.z;
 
-    XMVECTOR n001_101 = Lerp(vUVW, d001, d101);
-    XMVECTOR n011_111 = Lerp(vUVW, d011, d111);
+    // z = 0
+    float d01 = Lerp(u, d000, d001); // y = 0
+    float d02 = Lerp(u, d010, d011); // y = 1
+    float d1 = Lerp(v, d01, d02);
 
-    return 0.f;
+    // z = 1
+    float d11 = Lerp(u, d100, d101); // y = 0
+    float d12 = Lerp(u, d110, d111); // y = 1
+    float d2 = Lerp(v, d11, d12);
+
+    float n = Lerp(w, d1, d2);
+
+    return n;
 }
 
 int Perlin::Hash(int x, int y, int z)
