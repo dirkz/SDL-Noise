@@ -36,8 +36,8 @@ constexpr std::array<int, 512> Permutations{
 };
 
 constexpr float GradientW = 1.f;
-constexpr float GradientPlus = 1.f;
-constexpr float GradientMinus = -1.f;
+constexpr float GradientPlus = 0.7071068f;
+constexpr float GradientMinus = -0.7071068f;
 
 static const std::array<XMVECTOR, 16> Gradients{
     XMVectorSet(0, GradientPlus, GradientPlus, GradientW),
