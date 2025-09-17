@@ -97,6 +97,7 @@ float Perlin::Noise(float x, float y, float z)
     XMVECTOR pInsideCube = XMVectorAdd(p000, vUVW);
 
     // vectors from each corner point to the point inside the cube
+    // TODO: Normalize them?
     XMVECTOR v000 = XMVectorSubtract(pInsideCube, p000);
     XMVECTOR v001 = XMVectorSubtract(pInsideCube, p001);
     XMVECTOR v010 = XMVectorSubtract(pInsideCube, p010);
