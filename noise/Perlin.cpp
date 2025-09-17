@@ -82,7 +82,7 @@ float Perlin::Noise(float x, float y, float z)
     int gy = static_cast<int>(grid.y) % GridLength;
     int gz = static_cast<int>(grid.z) % GridLength;
 
-    // the corner point of the unit cube
+    // the corner points of the unit cube
     XMVECTOR p000 =
         XMVectorSet(static_cast<float>(gx), static_cast<float>(gy), static_cast<float>(gz), PointW);
     XMVECTOR p001 = XMVectorAdd(p000, VZ);
@@ -95,6 +95,16 @@ float Perlin::Noise(float x, float y, float z)
 
     // the point inside the cube that corresponds to our original x, y, z
     XMVECTOR pInsideCube = XMVectorAdd(p000, vUVW);
+
+    // vectors from each corner point to the point inside the cube
+    XMVECTOR v000 = XMVectorSubtract(pInsideCube, p000);
+    XMVECTOR v001 = XMVectorSubtract(pInsideCube, p001);
+    XMVECTOR v010 = XMVectorSubtract(pInsideCube, p010);
+    XMVECTOR v011 = XMVectorSubtract(pInsideCube, p011);
+    XMVECTOR v100 = XMVectorSubtract(pInsideCube, p100);
+    XMVECTOR v101 = XMVectorSubtract(pInsideCube, p101);
+    XMVECTOR v110 = XMVectorSubtract(pInsideCube, p110);
+    XMVECTOR v111 = XMVectorSubtract(pInsideCube, p111);
 
     return 0.f;
 }
