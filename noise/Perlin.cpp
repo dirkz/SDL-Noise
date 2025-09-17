@@ -19,6 +19,16 @@ static inline XMVECTOR Fade(FXMVECTOR v)
     return vv;
 }
 
+// a + t * (b - a)
+static inline XMVECTOR Lerp(FXMVECTOR t, FXMVECTOR a, FXMVECTOR b)
+{
+    XMVECTOR v = XMVectorSubtract(b, a);
+    v = XMVectorMultiply(v, t);
+    v = XMVectorAdd(a, v);
+
+    return v;
+}
+
 constexpr int GridLength = 256;
 
 constexpr std::array<int, 512> Permutations{
