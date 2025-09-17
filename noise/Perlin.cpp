@@ -116,6 +116,15 @@ float Perlin::Noise(float x, float y, float z)
     XMVECTOR g110 = GradientAt(gx + 1, gy + 1, gz);
     XMVECTOR g111 = GradientAt(gx + 1, gy + 1, gz + 1);
 
+    XMVECTOR d000 = XMVector3Dot(g000, v000);
+    XMVECTOR d001 = XMVector3Dot(g001, v001);
+    XMVECTOR d010 = XMVector3Dot(g010, v010);
+    XMVECTOR d011 = XMVector3Dot(g011, v011);
+    XMVECTOR d100 = XMVector3Dot(g100, v100);
+    XMVECTOR d101 = XMVector3Dot(g101, v101);
+    XMVECTOR d110 = XMVector3Dot(g110, v110);
+    XMVECTOR d111 = XMVector3Dot(g111, v111);
+
     return 0.f;
 }
 
