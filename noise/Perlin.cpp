@@ -81,15 +81,17 @@ float Perlin::Noise(float x, float y, float z)
     int gy = static_cast<int>(grid.y) % GridLength;
     int gz = static_cast<int>(grid.z) % GridLength;
 
-    XMVECTOR v000 =
+    XMVECTOR p000 =
         XMVectorSet(static_cast<float>(gx), static_cast<float>(gy), static_cast<float>(gz), PointW);
-    XMVECTOR v001 = XMVectorAdd(v000, VZ);
-    XMVECTOR v010 = XMVectorAdd(v000, VY);
-    XMVECTOR v011 = XMVectorAdd(XMVectorAdd(v000, VZ), VY);
-    XMVECTOR v100 = XMVectorAdd(v000, VX);
-    XMVECTOR v101 = XMVectorAdd(v100, VZ);
-    XMVECTOR v110 = XMVectorAdd(v100, VY);
-    XMVECTOR v111 = XMVectorAdd(XMVectorAdd(v100, VZ), VY);
+    XMVECTOR p001 = XMVectorAdd(p000, VZ);
+    XMVECTOR p010 = XMVectorAdd(p000, VY);
+    XMVECTOR p011 = XMVectorAdd(XMVectorAdd(p000, VZ), VY);
+    XMVECTOR p100 = XMVectorAdd(p000, VX);
+    XMVECTOR p101 = XMVectorAdd(p100, VZ);
+    XMVECTOR p110 = XMVectorAdd(p100, VY);
+    XMVECTOR p111 = XMVectorAdd(XMVectorAdd(p100, VZ), VY);
+
+    XMVECTOR pInsideCube = XMVectorAdd(p000, vUVW);
 
     return 0.f;
 }
