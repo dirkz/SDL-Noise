@@ -35,28 +35,29 @@ constexpr std::array<int, 512> Permutations{
     141, 128, 195, 78,  66,  215, 61,  156, 180, // mirror of first 256
 };
 
-constexpr float GradientW = 1.f;
+constexpr float PointW = 1.f;
+constexpr float VectorW = 0.f;
 constexpr float GradientPlus = 0.7071068f;
 constexpr float GradientMinus = -0.7071068f;
 
 static const std::array<XMVECTOR, 16> Gradients{
-    XMVectorSet(0, GradientPlus, GradientPlus, GradientW),
-    XMVectorSet(0, GradientMinus, GradientMinus, GradientW),
-    XMVectorSet(0, GradientPlus, GradientMinus, GradientW),
-    XMVectorSet(0, GradientMinus, GradientPlus, GradientW),
-    XMVectorSet(GradientPlus, 0, GradientPlus, GradientW),
-    XMVectorSet(GradientMinus, 0, GradientMinus, GradientW),
-    XMVectorSet(GradientPlus, 0, GradientMinus, GradientW),
-    XMVectorSet(GradientMinus, 0, GradientPlus, GradientW),
-    XMVectorSet(GradientPlus, GradientPlus, 0, GradientW),
-    XMVectorSet(GradientMinus, GradientMinus, 0, GradientW),
-    XMVectorSet(GradientPlus, GradientMinus, 0, GradientW),
-    XMVectorSet(GradientMinus, GradientPlus, 0, GradientW),
+    XMVectorSet(0, GradientPlus, GradientPlus, VectorW),
+    XMVectorSet(0, GradientMinus, GradientMinus, VectorW),
+    XMVectorSet(0, GradientPlus, GradientMinus, VectorW),
+    XMVectorSet(0, GradientMinus, GradientPlus, VectorW),
+    XMVectorSet(GradientPlus, 0, GradientPlus, VectorW),
+    XMVectorSet(GradientMinus, 0, GradientMinus, VectorW),
+    XMVectorSet(GradientPlus, 0, GradientMinus, VectorW),
+    XMVectorSet(GradientMinus, 0, GradientPlus, VectorW),
+    XMVectorSet(GradientPlus, GradientPlus, 0, VectorW),
+    XMVectorSet(GradientMinus, GradientMinus, 0, VectorW),
+    XMVectorSet(GradientPlus, GradientMinus, 0, VectorW),
+    XMVectorSet(GradientMinus, GradientPlus, 0, VectorW),
 };
 
-const XMVECTOR VX = XMVectorSet(1, 0, 0, GradientW);
-const XMVECTOR VY = XMVectorSet(0, 1, 0, GradientW);
-const XMVECTOR VZ = XMVectorSet(0, 0, 1, GradientW);
+const XMVECTOR VX = XMVectorSet(1, 0, 0, VectorW);
+const XMVECTOR VY = XMVectorSet(0, 1, 0, VectorW);
+const XMVECTOR VZ = XMVectorSet(0, 0, 1, VectorW);
 
 Perlin::Perlin()
 {
@@ -65,7 +66,7 @@ Perlin::Perlin()
 float Perlin::Noise(float x, float y, float z)
 {
     // original point, but positive
-    XMVECTOR vXYZ = XMVectorSet(x, y, z, GradientW);
+    XMVECTOR vXYZ = XMVectorSet(x, y, z, PointW);
     vXYZ = XMVectorAbs(vXYZ);
 
     // round down to the nearest integer
@@ -80,8 +81,8 @@ float Perlin::Noise(float x, float y, float z)
     int gy = static_cast<int>(grid.y) % GridLength;
     int gz = static_cast<int>(grid.z) % GridLength;
 
-    XMVECTOR v000 = XMVectorSet(static_cast<float>(gx), static_cast<float>(gy),
-                                static_cast<float>(gz), GradientW);
+    XMVECTOR v000 =
+        XMVectorSet(static_cast<float>(gx), static_cast<float>(gy), static_cast<float>(gz), PointW);
     XMVECTOR v001 = XMVectorAdd(v000, VZ);
     XMVECTOR v010 = XMVectorAdd(v000, VY);
     XMVECTOR v011 = XMVectorAdd(XMVectorAdd(v000, VZ), VY);
