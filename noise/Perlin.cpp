@@ -84,11 +84,11 @@ float Perlin::Noise(float x, float y, float z)
                                 static_cast<float>(gz), GradientW);
     XMVECTOR v001 = XMVectorAdd(v000, VZ);
     XMVECTOR v010 = XMVectorAdd(v000, VY);
-    XMVECTOR v011 = XMVectorAdd(v001, v010);
+    XMVECTOR v011 = XMVectorAdd(XMVectorAdd(v000, VZ), VY);
     XMVECTOR v100 = XMVectorAdd(v000, VX);
     XMVECTOR v101 = XMVectorAdd(v100, VZ);
     XMVECTOR v110 = XMVectorAdd(v100, VY);
-    XMVECTOR v111 = XMVectorAdd(v101, v110);
+    XMVECTOR v111 = XMVectorAdd(XMVectorAdd(v100, VZ), VY);
 
     return 0.f;
 }
