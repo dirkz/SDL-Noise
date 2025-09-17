@@ -10,7 +10,7 @@ AppState::AppState()
     sdl::Init(SDL_INIT_VIDEO);
     sdl::CreateWindowAndRenderer("SDL-Noise", 1280, 800, 0, &m_window, &m_renderer);
 
-    CreateTexture();
+    float f = m_perlinNoise.Noise(-1.6f, -1.6f, 0.3f);
 }
 
 void AppState::Iterate()

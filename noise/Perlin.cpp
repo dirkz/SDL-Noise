@@ -60,6 +60,14 @@ Perlin::Perlin()
 
 float Perlin::Noise(float x, float y, float z)
 {
+    // original point, but positive
+    XMVECTOR vXYZ = XMVectorSet(x, y, z, GradientW);
+    vXYZ = XMVectorAbs(vXYZ);
+
+    // round down to the nearest integer
+    XMVECTOR vUVW = XMVectorFloor(vXYZ);
+    XMVECTOR vRelativeInCube = XMVectorSubtract(vXYZ, vUVW);
+
     return 0.f;
 }
 
