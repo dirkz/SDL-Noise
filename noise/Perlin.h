@@ -19,4 +19,5 @@ struct Perlin
 
   private:
     int Hash(int x, int y, int z);
+    DirectX::XMVECTOR GradientAt(int x, int y, int z);
 };

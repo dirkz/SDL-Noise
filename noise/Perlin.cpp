@@ -106,6 +106,15 @@ float Perlin::Noise(float x, float y, float z)
     XMVECTOR v110 = XMVectorSubtract(pInsideCube, p110);
     XMVECTOR v111 = XMVectorSubtract(pInsideCube, p111);
 
+    XMVECTOR g000 = GradientAt(gx, gy, gz);
+    XMVECTOR g001 = GradientAt(gx, gy, gz + 1);
+    XMVECTOR g010 = GradientAt(gx, gy + 1, gz);
+    XMVECTOR g011 = GradientAt(gx, gy + 1, gz + 1);
+    XMVECTOR g100 = GradientAt(gx + 1, gy, gz);
+    XMVECTOR g101 = GradientAt(gx + 1, gy, gz + 1);
+    XMVECTOR g110 = GradientAt(gx + 1, gy + 1, gz);
+    XMVECTOR g111 = GradientAt(gx + 1, gy + 1, gz + 1);
+
     return 0.f;
 }
 
@@ -114,4 +123,11 @@ int Perlin::Hash(int x, int y, int z)
     size_t indexXY = Permutations[x] + static_cast<size_t>(y);
     size_t indexXYZ = Permutations[indexXY + z];
     return Permutations[indexXYZ];
+}
+
+DirectX::XMVECTOR Perlin::GradientAt(int x, int y, int z)
+{
+    int h = Hash(x, y, z);
+    int i = h & 0b1111;
+    return Gradients[i];
 }
