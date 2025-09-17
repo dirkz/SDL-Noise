@@ -54,6 +54,10 @@ static const std::array<XMVECTOR, 16> Gradients{
     XMVectorSet(GradientMinus, GradientPlus, 0, GradientW),
 };
 
+const XMVECTOR VX = XMVectorSet(1, 0, 0, GradientW);
+const XMVECTOR VY = XMVectorSet(0, 1, 0, GradientW);
+const XMVECTOR VZ = XMVectorSet(0, 0, 1, GradientW);
+
 Perlin::Perlin()
 {
 }
@@ -66,7 +70,25 @@ float Perlin::Noise(float x, float y, float z)
 
     // round down to the nearest integer
     XMVECTOR vUVW = XMVectorFloor(vXYZ);
-    XMVECTOR vRelativeInCube = XMVectorSubtract(vXYZ, vUVW);
+
+    // vector inside the cube, relative
+    vUVW = XMVectorSubtract(vXYZ, vUVW);
+
+    XMFLOAT3 grid;
+    XMStoreFloat3(&grid, vXYZ);
+    int gx = static_cast<int>(grid.x) % GridLength;
+    int gy = static_cast<int>(grid.y) % GridLength;
+    int gz = static_cast<int>(grid.z) % GridLength;
+
+    XMVECTOR v000 = XMVectorSet(static_cast<float>(gx), static_cast<float>(gy),
+                                static_cast<float>(gz), GradientW);
+    XMVECTOR v001 = XMVectorAdd(v000, VZ);
+    XMVECTOR v010 = XMVectorAdd(v000, VY);
+    XMVECTOR v011 = XMVectorAdd(v001, v010);
+    XMVECTOR v100 = XMVectorAdd(v000, VX);
+    XMVECTOR v101 = XMVectorAdd(v100, VZ);
+    XMVECTOR v110 = XMVectorAdd(v100, VY);
+    XMVECTOR v111 = XMVectorAdd(v101, v110);
 
     return 0.f;
 }
