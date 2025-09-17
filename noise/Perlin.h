@@ -18,9 +18,5 @@ struct Perlin
     float Noise(float x, float y, float z);
 
   private:
-    void InitGradients();
-    DirectX::XMVECTOR Gradient(int i);
     int Hash(int x, int y, int z);
-
-    std::array<DirectX::XMVECTOR, 16> m_gradients;
 };

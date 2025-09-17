@@ -37,113 +37,11 @@ constexpr std::array<int, 512> Permutations{
 
 Perlin::Perlin()
 {
-    InitGradients();
 }
 
 float Perlin::Noise(float x, float y, float z)
 {
-    float xAbs = std::abs(x);
-    float yAbs = std::abs(y);
-    float zAbs = std::abs(z);
-
-    // grid coordinates
-    int x0 = static_cast<int>(xAbs) % GridLength;
-    int y0 = static_cast<int>(yAbs) % GridLength;
-    int z0 = static_cast<int>(zAbs) % GridLength;
-
-    // constant w for building homogenous vectors
-    constexpr int iw1 = 1;
-    constexpr float fw1 = 1.f;
-
-    // vector to our point inside the unit cube
-    XMVECTOR vXYZ = XMVectorSet(xAbs, yAbs, zAbs, fw1);
-
-    // vectors pointing to the corners of the unit cube
-    XMVECTOR v000 = XMVectorSetInt(x0, y0, z0, iw1);
-    XMVECTOR v001 = XMVectorSetInt(x0, y0, z0 + 1, iw1);
-    XMVECTOR v010 = XMVectorSetInt(x0, y0 + 1, z0, iw1);
-    XMVECTOR v011 = XMVectorSetInt(x0, y0 + 1, z0 + 1, iw1);
-    XMVECTOR v100 = XMVectorSetInt(x0 + 1, y0, z0, iw1);
-    XMVECTOR v101 = XMVectorSetInt(x0 + 1, y0, z0 + 1, iw1);
-    XMVECTOR v110 = XMVectorSetInt(x0 + 1, y0 + 1, z0, iw1);
-    XMVECTOR v111 = XMVectorSetInt(x0 + 1, y0 + 1, z0 + 1, iw1);
-
-    // vectors from the corners of the unit cube to our point inside
-    v000 = XMVectorSubtract(vXYZ, v000);
-    v001 = XMVectorSubtract(vXYZ, v001);
-    v010 = XMVectorSubtract(vXYZ, v010);
-    v011 = XMVectorSubtract(vXYZ, v011);
-    v100 = XMVectorSubtract(vXYZ, v100);
-    v101 = XMVectorSubtract(vXYZ, v101);
-    v110 = XMVectorSubtract(vXYZ, v110);
-    v111 = XMVectorSubtract(vXYZ, v111);
-
-    // normalize those vectors
-    v000 = XMVector3Normalize(v000);
-    v001 = XMVector3Normalize(v001);
-    v010 = XMVector3Normalize(v010);
-    v011 = XMVector3Normalize(v011);
-    v100 = XMVector3Normalize(v100);
-    v101 = XMVector3Normalize(v101);
-    v110 = XMVector3Normalize(v110);
-    v111 = XMVector3Normalize(v111);
-
-    // dot products
-    float d000 = XMVectorGetX(XMVector3Dot(v000, vXYZ));
-    float d001 = XMVectorGetX(XMVector3Dot(v001, vXYZ));
-    float d010 = XMVectorGetX(XMVector3Dot(v010, vXYZ));
-    float d011 = XMVectorGetX(XMVector3Dot(v011, vXYZ));
-    float d100 = XMVectorGetX(XMVector3Dot(v100, vXYZ));
-    float d101 = XMVectorGetX(XMVector3Dot(v101, vXYZ));
-    float d110 = XMVectorGetX(XMVector3Dot(v110, vXYZ));
-    float d111 = XMVectorGetX(XMVector3Dot(v111, vXYZ));
-
-    // relative coordinates of our point inside the unit cube
-    float u = xAbs - x0;
-    float v = yAbs - y0;
-    float w = zAbs - z0;
-
-    // smooth the relative coordinates
-    float uSmooth = Fade(u);
-    float vSmooth = Fade(v);
-    float wSmooth = Fade(w);
-
     return 0.f;
-}
-
-void Perlin::InitGradients()
-{
-    constexpr std::array<float, 2> values{+1.f, -1.f};
-    constexpr float w = 1.f;
-
-    int index = 0;
-
-    for (const auto v1 : values)
-    {
-        for (const auto v2 : values)
-        {
-            m_gradients[index++] = XMVectorSet(0, v1, v2, w);
-            m_gradients[index++] = XMVectorSet(v1, 0, v2, w);
-            m_gradients[index++] = XMVectorSet(v1, v2, 0, w);
-        }
-    }
-
-    // repeat some gradients
-    m_gradients[12] = XMVectorSet(1, 1, 0, 0);
-    m_gradients[13] = XMVectorSet(-1, 1, 0, 0);
-    m_gradients[14] = XMVectorSet(0, -1, 1, 0);
-    m_gradients[15] = XMVectorSet(0, -1, -1, 0);
-
-    // normalize
-    for (int i = 0; i < m_gradients.size(); ++i)
-    {
-        m_gradients[i] = XMVector3Normalize(m_gradients[i]);
-    }
-}
-
-DirectX::XMVECTOR Perlin::Gradient(int i)
-{
-    return m_gradients[i];
 }
 
 int Perlin::Hash(int x, int y, int z)
