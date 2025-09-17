@@ -36,22 +36,22 @@ constexpr std::array<int, 512> Permutations{
 };
 
 constexpr float GradientW = 1.f;
-constexpr float GradientPlusOne = 1.f;
-constexpr float GradientMinusOne = -1.f;
+constexpr float GradientPlus = 1.f;
+constexpr float GradientMinus = -1.f;
 
 static const std::array<XMVECTOR, 16> Gradients{
-    XMVectorSet(0, GradientPlusOne, GradientPlusOne, GradientW),
-    XMVectorSet(0, GradientMinusOne, GradientMinusOne, GradientW),
-    XMVectorSet(0, GradientPlusOne, GradientMinusOne, GradientW),
-    XMVectorSet(0, GradientMinusOne, GradientPlusOne, GradientW),
-    XMVectorSet(GradientPlusOne, 0, GradientPlusOne, GradientW),
-    XMVectorSet(GradientMinusOne, 0, GradientMinusOne, GradientW),
-    XMVectorSet(GradientPlusOne, 0, GradientMinusOne, GradientW),
-    XMVectorSet(GradientMinusOne, 0, GradientPlusOne, GradientW),
-    XMVectorSet(GradientPlusOne, GradientPlusOne, 0, GradientW),
-    XMVectorSet(GradientMinusOne, GradientMinusOne, 0, GradientW),
-    XMVectorSet(GradientPlusOne, GradientMinusOne, 0, GradientW),
-    XMVectorSet(GradientMinusOne, GradientPlusOne, 0, GradientW),
+    XMVectorSet(0, GradientPlus, GradientPlus, GradientW),
+    XMVectorSet(0, GradientMinus, GradientMinus, GradientW),
+    XMVectorSet(0, GradientPlus, GradientMinus, GradientW),
+    XMVectorSet(0, GradientMinus, GradientPlus, GradientW),
+    XMVectorSet(GradientPlus, 0, GradientPlus, GradientW),
+    XMVectorSet(GradientMinus, 0, GradientMinus, GradientW),
+    XMVectorSet(GradientPlus, 0, GradientMinus, GradientW),
+    XMVectorSet(GradientMinus, 0, GradientPlus, GradientW),
+    XMVectorSet(GradientPlus, GradientPlus, 0, GradientW),
+    XMVectorSet(GradientMinus, GradientMinus, 0, GradientW),
+    XMVectorSet(GradientPlus, GradientMinus, 0, GradientW),
+    XMVectorSet(GradientMinus, GradientPlus, 0, GradientW),
 };
 
 Perlin::Perlin()
