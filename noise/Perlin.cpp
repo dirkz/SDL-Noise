@@ -35,6 +35,25 @@ constexpr std::array<int, 512> Permutations{
     141, 128, 195, 78,  66,  215, 61,  156, 180, // mirror of first 256
 };
 
+constexpr float GradientW = 1.f;
+constexpr float GradientPlusOne = 1.f;
+constexpr float GradientMinusOne = -1.f;
+
+static const std::array<XMVECTOR, 16> Gradients{
+    XMVectorSet(0, GradientPlusOne, GradientPlusOne, GradientW),
+    XMVectorSet(0, GradientMinusOne, GradientMinusOne, GradientW),
+    XMVectorSet(0, GradientPlusOne, GradientMinusOne, GradientW),
+    XMVectorSet(0, GradientMinusOne, GradientPlusOne, GradientW),
+    XMVectorSet(GradientPlusOne, 0, GradientPlusOne, GradientW),
+    XMVectorSet(GradientMinusOne, 0, GradientMinusOne, GradientW),
+    XMVectorSet(GradientPlusOne, 0, GradientMinusOne, GradientW),
+    XMVectorSet(GradientMinusOne, 0, GradientPlusOne, GradientW),
+    XMVectorSet(GradientPlusOne, GradientPlusOne, 0, GradientW),
+    XMVectorSet(GradientMinusOne, GradientMinusOne, 0, GradientW),
+    XMVectorSet(GradientPlusOne, GradientMinusOne, 0, GradientW),
+    XMVectorSet(GradientMinusOne, GradientPlusOne, 0, GradientW),
+};
+
 Perlin::Perlin()
 {
 }
