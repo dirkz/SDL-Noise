@@ -10,7 +10,7 @@ AppState::AppState()
     sdl::Init(SDL_INIT_VIDEO);
     sdl::CreateWindowAndRenderer("SDL-Noise", 1280, 800, 0, &m_window, &m_renderer);
 
-    float f = m_perlinNoise.Noise(-0.6f, -0.6f, 0.3f);
+    CreateTexture();
 }
 
 void AppState::Iterate()
@@ -38,7 +38,7 @@ void AppState::CreateTexture()
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            float n = m_perlinNoise.Noise(x, -y, 0.5f);
+            float n = m_perlinNoise.Noise(x, y, 0.5f);
         }
     }
 }
