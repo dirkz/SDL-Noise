@@ -15,5 +15,7 @@ struct AppState
 
     SDL_Window *m_window = nullptr;
     SDL_Renderer *m_renderer = nullptr;
+    SDL_Surface *m_surface = nullptr;
+
     Perlin m_perlinNoise;
 };

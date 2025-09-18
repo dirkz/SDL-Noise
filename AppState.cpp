@@ -6,9 +6,14 @@ constexpr int NoiseWidth = 512;
 
 AppState::AppState()
 {
+    constexpr int windowWidth = 1280;
+    constexpr int windowHeight = 800;
+
     sdl::SetAppMetadata("SDL-Noise", "0.0.1", "com.dirkz.samples.sdl.noise");
     sdl::Init(SDL_INIT_VIDEO);
-    sdl::CreateWindowAndRenderer("SDL-Noise", 1280, 800, 0, &m_window, &m_renderer);
+    sdl::CreateWindowAndRenderer("SDL-Noise", windowWidth, windowHeight, 0, &m_window, &m_renderer);
+
+    sdl::CreateSurface(windowWidth, windowHeight, SDL_PIXELFORMAT_RGBA8888);
 
     CreateTexture();
 }
