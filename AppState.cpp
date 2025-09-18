@@ -34,11 +34,20 @@ void AppState::Iterate()
     sdl::RenderPresent(m_renderer);
 }
 
+static void SetPixel(void* pixels, int pitch, int x, int y, FXMVECTOR rgba)
+{
+
+}
+
 void AppState::CreateTexture()
 {
     int width = m_surface->w;
     int height = m_surface->h;
     int pitch = m_surface->pitch;
+
+    sdl::LockSurface(m_surface);
+
+    XMVECTORF32 baseColor = DirectX::Colors::CornflowerBlue;
 
     constexpr float frequency = 1.f / 6.f;
     for (int i = 0; i < NoiseWidth; ++i)
@@ -48,6 +57,12 @@ void AppState::CreateTexture()
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
             float n = m_perlinNoise.Noise(x, y, 0.5f);
+            n = (n + 1) / 2;
+            XMVECTOR scale = XMVectorReplicate(n);
+            XMVECTOR color = XMColorModulate(baseColor, scale);
+            SetPixel(m_surface->pixels, pitch, i, j, color);
         }
     }
+
+    sdl::UnlockSurface(m_surface);
 }
