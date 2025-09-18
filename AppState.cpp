@@ -2,8 +2,6 @@
 
 using namespace DirectX;
 
-constexpr int NoiseWidth = 512;
-
 AppState::AppState()
 {
     constexpr int windowWidth = 1280;
@@ -50,9 +48,9 @@ void AppState::CreateTexture()
     XMVECTORF32 baseColor = DirectX::Colors::CornflowerBlue;
 
     constexpr float frequency = 1.f / 6.f;
-    for (int i = 0; i < NoiseWidth; ++i)
+    for (int i = 0; i < width; ++i)
     {
-        for (int j = 0; j < NoiseWidth; ++j)
+        for (int j = 0; j < height; ++j)
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
