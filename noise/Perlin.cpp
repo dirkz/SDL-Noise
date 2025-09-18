@@ -2,33 +2,6 @@
 
 using namespace DirectX;
 
-static const XMVECTOR V15 = XMVectorReplicate(15.f);
-static const XMVECTOR V10 = XMVectorReplicate(10.f);
-
-// 6x^5 - 15x^4 + 10^3
-// x * x * x * (x * (6 * x - 15) + 10)
-static inline XMVECTOR Fade(FXMVECTOR v)
-{
-    XMVECTOR vv = XMVectorScale(v, 6.f);
-    vv = XMVectorSubtract(vv, V15);
-    vv = XMVectorMultiply(v, vv);
-    vv = XMVectorAdd(vv, V10);
-    XMVECTOR v3 = XMVectorMultiply(v, XMVectorMultiply(v, v));
-    vv = XMVectorMultiply(v3, vv);
-
-    return vv;
-}
-
-// a + t * (b - a)
-static inline XMVECTOR Lerp(FXMVECTOR t, FXMVECTOR a, FXMVECTOR b)
-{
-    XMVECTOR v = XMVectorSubtract(b, a);
-    v = XMVectorMultiply(v, t);
-    v = XMVectorAdd(a, v);
-
-    return v;
-}
-
 constexpr int GridLength = 256;
 
 constexpr std::array<int, 512> Permutations{
@@ -85,10 +58,6 @@ static const std::array<XMVECTOR, 16> Gradients{
 const XMVECTOR VX = XMVectorSet(1, 0, 0, VectorW);
 const XMVECTOR VY = XMVectorSet(0, 1, 0, VectorW);
 const XMVECTOR VZ = XMVectorSet(0, 0, 1, VectorW);
-
-Perlin::Perlin()
-{
-}
 
 float Perlin::Noise(float x, float y, float z)
 {
