@@ -22,13 +22,13 @@ void AppState::Iterate()
     double seconds = static_cast<double>(millis) / 1000.;
 
     XMVECTORF32 color = DirectX::Colors::CornflowerBlue;
-    const float *floats = color;
-    float r = floats[0];
-    float g = floats[1];
-    float b = floats[2];
+    const float *fColor = color;
+    float r = fColor[0];
+    float g = fColor[1];
+    float b = fColor[2];
 
     sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
-    //sdl::RenderClear(m_renderer);
+    // sdl::RenderClear(m_renderer);
 
     sdl::RenderTexture(m_renderer, m_texture, nullptr, nullptr);
 
