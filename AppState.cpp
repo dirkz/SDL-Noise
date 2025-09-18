@@ -32,9 +32,23 @@ void AppState::Iterate()
     sdl::RenderPresent(m_renderer);
 }
 
-static void SetPixel(void* pixels, int pitch, int x, int y, FXMVECTOR rgba)
+static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
 {
+    XMFLOAT4 floatsRgba;
+    XMStoreFloat4(&floatsRgba, rgba);
 
+    unsigned char r = static_cast<unsigned char>(floatsRgba.x * 255.f);
+    unsigned char g = static_cast<unsigned char>(floatsRgba.y * 255.f);
+    unsigned char b = static_cast<unsigned char>(floatsRgba.z * 255.f);
+    unsigned char a = static_cast<unsigned char>(floatsRgba.w * 255.f);
+
+    int offset = pitch * y + x * 4;
+
+    unsigned char *bytes = reinterpret_cast<unsigned char *>(pixels);
+    bytes[0] = r;
+    bytes[1] = g;
+    bytes[2] = b;
+    bytes[3] = a;
 }
 
 void AppState::CreateTexture()
