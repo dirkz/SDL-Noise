@@ -36,7 +36,7 @@ struct Perlin
 
     template <class T> static T Lerp(T t, T a, T b)
     {
-        return a + t * b;
+        return a + t * (b - a);
     }
 
     float Noise(float x, float y, float z);
