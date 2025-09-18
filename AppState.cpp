@@ -28,19 +28,22 @@ void AppState::Iterate()
     float b = floats[2];
 
     sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
-    sdl::RenderClear(m_renderer);
+    //sdl::RenderClear(m_renderer);
+
+    sdl::RenderTexture(m_renderer, m_texture, nullptr, nullptr);
+
     sdl::RenderPresent(m_renderer);
 }
 
 static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
 {
-    XMFLOAT4 floatsRgba;
-    XMStoreFloat4(&floatsRgba, rgba);
+    XMFLOAT4 fRgba;
+    XMStoreFloat4(&fRgba, rgba);
 
-    unsigned char r = static_cast<unsigned char>(floatsRgba.x * 255.f);
-    unsigned char g = static_cast<unsigned char>(floatsRgba.y * 255.f);
-    unsigned char b = static_cast<unsigned char>(floatsRgba.z * 255.f);
-    unsigned char a = static_cast<unsigned char>(floatsRgba.w * 255.f);
+    unsigned char r = static_cast<unsigned char>(fRgba.x * 255.f);
+    unsigned char g = static_cast<unsigned char>(fRgba.y * 255.f);
+    unsigned char b = static_cast<unsigned char>(fRgba.z * 255.f);
+    unsigned char a = static_cast<unsigned char>(fRgba.w * 255.f);
 
     int offset = pitch * y + x * 4;
 
@@ -72,9 +75,11 @@ void AppState::CreateTexture()
             n = (n + 1) / 2;
             XMVECTOR scale = XMVectorReplicate(n);
             XMVECTOR color = XMColorModulate(baseColor, scale);
-            SetPixel(m_surface->pixels, pitch, i, j, color);
+            SetPixel(m_surface->pixels, pitch, i, j, baseColor);
         }
     }
 
     sdl::UnlockSurface(m_surface);
+
+    m_texture = sdl::CreateTextureFromSurface(m_renderer, m_surface);
 }
