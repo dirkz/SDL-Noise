@@ -27,7 +27,7 @@ void AppState::Iterate()
     float g = fColor[1];
     float b = fColor[2];
 
-    sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
+    // sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
     // sdl::RenderClear(m_renderer);
 
     sdl::RenderTexture(m_renderer, m_texture, nullptr, nullptr);
