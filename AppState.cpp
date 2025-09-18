@@ -13,7 +13,7 @@ AppState::AppState()
     sdl::Init(SDL_INIT_VIDEO);
     sdl::CreateWindowAndRenderer("SDL-Noise", windowWidth, windowHeight, 0, &m_window, &m_renderer);
 
-    sdl::CreateSurface(windowWidth, windowHeight, SDL_PIXELFORMAT_RGBA8888);
+    m_surface = sdl::CreateSurface(windowWidth, windowHeight, SDL_PIXELFORMAT_RGBA8888);
 
     CreateTexture();
 }
@@ -36,6 +36,10 @@ void AppState::Iterate()
 
 void AppState::CreateTexture()
 {
+    int width = m_surface->w;
+    int height = m_surface->h;
+    int pitch = m_surface->pitch;
+
     constexpr float frequency = 1.f / 6.f;
     for (int i = 0; i < NoiseWidth; ++i)
     {
