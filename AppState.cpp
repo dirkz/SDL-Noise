@@ -48,10 +48,10 @@ static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
     int offset = pitch * y + x * 4;
 
     unsigned char *bytes = reinterpret_cast<unsigned char *>(pixels);
-    bytes[0] = r;
-    bytes[1] = g;
-    bytes[2] = b;
-    bytes[3] = a;
+    bytes[offset + 0] = r;
+    bytes[offset + 1] = g;
+    bytes[offset + 2] = b;
+    bytes[offset + 3] = a;
 }
 
 void AppState::CreateTexture()
