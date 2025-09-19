@@ -55,5 +55,8 @@ double ImprovedNoise::Noise(double x, double y, double z)
         v = Fade(y),    // FOR EACH OF X,Y,Z.
         w = Fade(z);
 
+    int A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z,     // HASH COORDINATES OF
+        B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z; // THE 8 CUBE CORNERS,
+
     return 0.0;
 }
