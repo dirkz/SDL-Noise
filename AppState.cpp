@@ -75,7 +75,7 @@ void AppState::CreateTexture()
             n = (n + 1) / 2;
             XMVECTOR scale = XMVectorReplicate(n);
             XMVECTOR color = XMColorModulate(baseColor, scale);
-            SetPixel(m_surface->pixels, pitch, i, j, baseColor);
+            SetPixel(m_surface->pixels, pitch, i, j, color);
         }
     }
 
