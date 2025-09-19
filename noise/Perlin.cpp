@@ -155,9 +155,8 @@ float Perlin::Noise(float x, float y, float z)
 
 int Perlin::Hash(int x, int y, int z)
 {
-    size_t indexXY = Permutations[x] + static_cast<size_t>(y);
-    size_t indexXYZ = Permutations[indexXY + z];
-    return Permutations[indexXYZ];
+    auto i = (x + Permutations[(y + Permutations[z]) % GridLength]) % GridLength;
+    return i;
 }
 
 DirectX::XMVECTOR Perlin::GradientAt(int x, int y, int z)
