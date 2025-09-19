@@ -64,7 +64,7 @@ void AppState::CreateTexture()
 
     XMVECTORF32 baseColor = DirectX::Colors::CornflowerBlue;
 
-    constexpr float frequency = 1.f / 2.f;
+    constexpr float frequency = 1.f / 6.f;
     for (int i = 0; i < width; ++i)
     {
         for (int j = 0; j < height; ++j)
