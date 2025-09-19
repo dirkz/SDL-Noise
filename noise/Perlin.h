@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stdafx.h"
+
 struct Perlin
 {
     // 6x^5 - 15x^4 + 10^3
