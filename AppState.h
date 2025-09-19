@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-#include "Perlin.h"
+#include "ImprovedNoise.h"
 
 struct AppState
 {
@@ -19,5 +19,5 @@ struct AppState
     SDL_Surface *m_surface = nullptr;
     SDL_Texture *m_texture = nullptr;
 
-    Perlin m_perlinNoise;
+    ImprovedNoise m_noise;
 };

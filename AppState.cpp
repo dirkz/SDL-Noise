@@ -66,16 +66,17 @@ void AppState::CreateTexture()
 
     XMVECTORF32 baseColor = DirectX::Colors::CornflowerBlue;
 
-    constexpr float frequency = 1.f / 6.f;
+    constexpr float frequency = 1.f / 32.f;
     for (int i = 0; i < width; ++i)
     {
         for (int j = 0; j < height; ++j)
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            float n = m_perlinNoise.Noise(x, y, 0.5f);
+            double n = m_noise.Noise(x, y, 0.5f);
             n = (n + 1) / 2;
-            XMVECTOR scale = XMVectorReplicate(n);
+            float fN = static_cast<float>(n);
+            XMVECTOR scale = XMVectorReplicate(fN);
             XMVECTOR color = XMColorModulate(baseColor, scale);
             SetPixel(m_surface->pixels, pitch, i, j, color);
         }
