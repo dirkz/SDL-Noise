@@ -47,5 +47,9 @@ double ImprovedNoise::Noise(double x, double y, double z)
         Y = static_cast<int>(std::floor(y)) & 255, // CONTAINS POINT.
         Z = static_cast<int>(std::floor(z)) & 255;
 
+    x -= std::floor(x); // FIND RELATIVE X,Y,Z
+    y -= std::floor(y); // OF POINT IN CUBE.
+    z -= std::floor(z);
+
     return 0.0;
 }
