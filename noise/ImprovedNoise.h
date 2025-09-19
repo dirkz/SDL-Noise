@@ -13,4 +13,6 @@ struct ImprovedNoise
     {
         return a + t * (b - a);
     }
+
+    static double Grad(int hash, double x, double y, double z);
 };
