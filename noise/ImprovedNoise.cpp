@@ -40,3 +40,12 @@ double ImprovedNoise::Grad(int hash, double x, double y, double z)
                                  : z;
     return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
+
+double ImprovedNoise::Noise(double x, double y, double z)
+{
+    int X = static_cast<int>(std::floor(x)) & 255, // FIND UNIT CUBE THAT
+        Y = static_cast<int>(std::floor(y)) & 255, // CONTAINS POINT.
+        Z = static_cast<int>(std::floor(z)) & 255;
+
+    return 0.0;
+}

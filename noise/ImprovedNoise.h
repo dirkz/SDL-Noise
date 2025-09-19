@@ -15,4 +15,6 @@ struct ImprovedNoise
     }
 
     static double Grad(int hash, double x, double y, double z);
+
+    static double Noise(double x, double y, double z);
 };
