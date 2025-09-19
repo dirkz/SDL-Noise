@@ -9,6 +9,7 @@ struct AppState
     AppState();
 
     void Iterate();
+    void ClearScreen(DirectX::FXMVECTOR color);
 
   private:
     void CreateTexture();

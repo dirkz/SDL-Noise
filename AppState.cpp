@@ -21,18 +21,20 @@ void AppState::Iterate()
     Uint64 millis = sdl::GetTicks();
     double seconds = static_cast<double>(millis) / 1000.;
 
-    XMVECTORF32 color = DirectX::Colors::CornflowerBlue;
-    const float *fColor = color;
-    float r = fColor[0];
-    float g = fColor[1];
-    float b = fColor[2];
-
-    // sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
-    // sdl::RenderClear(m_renderer);
-
     sdl::RenderTexture(m_renderer, m_texture, nullptr, nullptr);
-
     sdl::RenderPresent(m_renderer);
+}
+
+void AppState::ClearScreen(FXMVECTOR color)
+{
+    XMFLOAT4 fColor;
+    XMStoreFloat4(&fColor, color);
+    float r = fColor.x;
+    float g = fColor.y;
+    float b = fColor.z;
+
+    sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
+    sdl::RenderClear(m_renderer);
 }
 
 static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
