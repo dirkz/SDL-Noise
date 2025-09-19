@@ -45,13 +45,13 @@ static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
     unsigned char b = static_cast<unsigned char>(fRgba.z * 255.f);
     unsigned char a = static_cast<unsigned char>(fRgba.w * 255.f);
 
-    int offset = pitch * y + x * 4;
+    Uint32 color = a + (b << 8) + (g << 16) + (r << 24);
 
-    unsigned char *bytes = reinterpret_cast<unsigned char *>(pixels);
-    bytes[offset + 0] = r;
-    bytes[offset + 1] = g;
-    bytes[offset + 2] = b;
-    bytes[offset + 3] = a;
+    int lineOffset = pitch * y;
+    unsigned char *bytes = reinterpret_cast<unsigned char *>(pixels) + lineOffset;
+    Uint32 *row = reinterpret_cast<Uint32 *>(bytes);
+
+    row[x] = color;
 }
 
 void AppState::CreateTexture()
