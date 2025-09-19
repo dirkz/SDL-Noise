@@ -51,5 +51,9 @@ double ImprovedNoise::Noise(double x, double y, double z)
     y -= std::floor(y); // OF POINT IN CUBE.
     z -= std::floor(z);
 
+    double u = Fade(x), // COMPUTE FADE CURVES
+        v = Fade(y),    // FOR EACH OF X,Y,Z.
+        w = Fade(z);
+
     return 0.0;
 }
