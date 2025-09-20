@@ -1,41 +1,12 @@
 #include "AppState.h"
 
+#include "ImprovedNoise.h"
+#include "ImprovedNoiseDX.h"
+
 using namespace DirectX;
 
-AppState::AppState()
-{
-    constexpr int windowWidth = 1280;
-    constexpr int windowHeight = 800;
-
-    sdl::SetAppMetadata("SDL-Noise", "0.0.1", "com.dirkz.samples.sdl.noise");
-    sdl::Init(SDL_INIT_VIDEO);
-    sdl::CreateWindowAndRenderer("SDL-Noise", windowWidth, windowHeight, 0, &m_window, &m_renderer);
-
-    m_surface = sdl::CreateSurface(windowWidth, windowHeight, SDL_PIXELFORMAT_RGBA8888);
-
-    CreateTexture();
-}
-
-void AppState::Iterate()
-{
-    Uint64 millis = sdl::GetTicks();
-    double seconds = static_cast<double>(millis) / 1000.;
-
-    sdl::RenderTexture(m_renderer, m_texture, nullptr, nullptr);
-    sdl::RenderPresent(m_renderer);
-}
-
-void AppState::ClearScreen(FXMVECTOR color)
-{
-    XMFLOAT4 fColor;
-    XMStoreFloat4(&fColor, color);
-    float r = fColor.x;
-    float g = fColor.y;
-    float b = fColor.z;
-
-    sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
-    sdl::RenderClear(m_renderer);
-}
+constexpr int WindowWidth = 1280;
+constexpr int WindowHeight = 800;
 
 static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
 {
@@ -56,15 +27,17 @@ static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
     row[x] = color;
 }
 
-void AppState::CreateTexture()
+template <class T>
+static SDL_Texture *CreateTexture(SDL_Renderer *renderer, const T &noise, int width, int height)
 {
-    int width = m_surface->w;
-    int height = m_surface->h;
-    int pitch = m_surface->pitch;
+    SDL_Surface *surface = sdl::CreateSurface(width, height, SDL_PIXELFORMAT_RGBA8888);
+    sdl::Surface surfaceToDelete{surface};
 
-    sdl::LockSurface(m_surface);
+    int pitch = surface->pitch;
 
-    XMVECTORF32 baseColor = DirectX::Colors::CornflowerBlue;
+    sdl::LockSurface(surface);
+
+    DirectX::XMVECTORF32 baseColor = DirectX::Colors::CornflowerBlue;
 
     constexpr float frequency = 1.f / 32.f;
     for (int i = 0; i < width; ++i)
@@ -73,16 +46,60 @@ void AppState::CreateTexture()
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            double n = m_noise.Noise(x, y, 0.5f);
+            double n = noise.Noise(x, y, 0.5f);
             n = (n + 1) / 2;
             float fN = static_cast<float>(n);
-            XMVECTOR scale = XMVectorReplicate(fN);
-            XMVECTOR color = XMColorModulate(baseColor, scale);
-            SetPixel(m_surface->pixels, pitch, i, j, color);
+            DirectX::XMVECTOR scale = DirectX::XMVectorReplicate(fN);
+            DirectX::XMVECTOR color = DirectX::XMColorModulate(baseColor, scale);
+            SetPixel(surface->pixels, pitch, i, j, color);
         }
     }
 
-    sdl::UnlockSurface(m_surface);
+    sdl::UnlockSurface(surface);
 
-    m_texture = sdl::CreateTextureFromSurface(m_renderer, m_surface);
+    SDL_Texture *texture = sdl::CreateTextureFromSurface(renderer, surface);
+
+    return texture;
+}
+
+AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
+{
+    sdl::SetAppMetadata("SDL-Noise", "0.0.1", "com.dirkz.samples.sdl.noise");
+    sdl::Init(SDL_INIT_VIDEO);
+    sdl::CreateWindowAndRenderer("SDL-Noise", WindowWidth, WindowHeight, 0, &m_window, &m_renderer);
+
+    ImprovedNoise noise1{};
+    ImprovedNoiseDX noise2{};
+
+    m_texture1 = CreateTexture(m_renderer, noise1, WindowWidth / 2, WindowHeight);
+    m_texture2 = CreateTexture(m_renderer, noise2, WindowWidth / 2, WindowHeight);
+}
+
+void AppState::Iterate()
+{
+    Uint64 millis = sdl::GetTicks();
+    double seconds = static_cast<double>(millis) / 1000.;
+
+    float halfWidth = static_cast<float>(m_windowWidth) / 2.f;
+    float height = static_cast<float>(m_windowHeight);
+
+    SDL_FRect rect1{.x = 0, .y = 0, .w = halfWidth, .h = height};
+    SDL_FRect rect2{.x = halfWidth, .y = 0, .w = halfWidth, .h = height};
+
+    sdl::RenderTexture(m_renderer, m_texture1, nullptr, &rect1);
+    sdl::RenderTexture(m_renderer, m_texture2, nullptr, &rect2);
+
+    sdl::RenderPresent(m_renderer);
+}
+
+void AppState::ClearScreen(FXMVECTOR color)
+{
+    XMFLOAT4 fColor;
+    XMStoreFloat4(&fColor, color);
+    float r = fColor.x;
+    float g = fColor.y;
+    float b = fColor.z;
+
+    sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
+    sdl::RenderClear(m_renderer);
 }
