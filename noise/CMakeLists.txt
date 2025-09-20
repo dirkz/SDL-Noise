@@ -2,7 +2,9 @@ add_library(noise OBJECT
 	"Perlin.h"
 	"Perlin.cpp"
 	"ImprovedNoise.h"
-	"ImprovedNoise.cpp")
+	"ImprovedNoise.cpp"
+	"ImprovedNoiseDX.h"
+	"ImprovedNoiseDX.cpp")
 
  if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET noise PROPERTY CXX_STANDARD 20)
