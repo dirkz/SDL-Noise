@@ -67,11 +67,11 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
     sdl::Init(SDL_INIT_VIDEO);
     sdl::CreateWindowAndRenderer("SDL-Noise", WindowWidth, WindowHeight, 0, &m_window, &m_renderer);
 
-    m_texture1 =
-        CreateTexture(m_renderer, WindowWidth / 2, WindowHeight,
-                      [](float x, float y, float z) { return ImprovedNoise::Noise(x, y, z); });
-    m_texture2 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight,
-                               [](float x, float y, float z) { return NoiseDX::Noise(x, y, z); });
+    auto improvedNoise = [](float x, float y, float z) { return ImprovedNoise::Noise(x, y, z); };
+    auto noiseDX = [](float x, float y, float z) { return NoiseDX::Noise(x, y, z); };
+
+    m_texture1 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoise);
+    m_texture2 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, noiseDX);
 }
 
 void AppState::Iterate()
