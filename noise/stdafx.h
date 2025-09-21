@@ -7,4 +7,6 @@
 #include <SDL3/SDL.h>
 
 #include <array>
+#include <chrono>
 #include <cmath>
+#include <string>
