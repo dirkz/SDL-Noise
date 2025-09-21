@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace NoiseDX
+namespace DXM
 {
 
 DirectX::XMVECTOR Fade(DirectX::FXMVECTOR t);
@@ -21,4 +21,4 @@ float Grad(int hash, float x, float y, float z);
 
 float Noise(float x, float y, float z);
 
-}; // namespace NoiseDX
+}; // namespace DXM

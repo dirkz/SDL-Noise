@@ -91,7 +91,7 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
     sdl::CreateWindowAndRenderer("SDL-Noise", WindowWidth, WindowHeight, 0, &m_window, &m_renderer);
 
     auto improvedNoiseFloat = [](float x, float y, float z) { return Improved::Noise(x, y, z); };
-    auto noiseDX = [](float x, float y, float z) { return NoiseDX::Noise(x, y, z); };
+    auto noiseDX = [](float x, float y, float z) { return DXM::Noise(x, y, z); };
 
     m_texture1 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoiseFloat);
     m_texture2 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, noiseDX);
@@ -129,7 +129,7 @@ void AppState::ClearScreen(FXMVECTOR color)
 void AppState::BenchmarkNoises()
 {
     auto improvedNoiseFloat = [](float x, float y, float z) { return Improved::Noise(x, y, z); };
-    auto noiseDX = [](float x, float y, float z) { return NoiseDX::Noise(x, y, z); };
+    auto noiseDX = [](float x, float y, float z) { return DXM::Noise(x, y, z); };
 
     auto improvedNoiseDouble = [](double x, double y, double z) {
         return Improved::Noise(x, y, z);

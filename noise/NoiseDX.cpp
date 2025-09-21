@@ -2,7 +2,7 @@
 
 #include "ImprovedNoise.h"
 
-namespace NoiseDX
+namespace DXM
 {
 
 using namespace DirectX;
@@ -146,4 +146,4 @@ float Noise(float x, float y, float z)
                            Grad0(Improved::P[BB + 1], XMVectorAdd(p, MinusXYZ)))));
 }
 
-} // namespace NoiseDX
+} // namespace DXM
