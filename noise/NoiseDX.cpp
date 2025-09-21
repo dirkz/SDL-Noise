@@ -108,9 +108,13 @@ double NoiseDX::Noise(double x, double y, double z)
     y -= std::floor(y); // OF POINT IN CUBE.
     z -= std::floor(z);
 
-    double u = Fade(x), // COMPUTE FADE CURVES
-        v = Fade(y),    // FOR EACH OF X,Y,Z.
-        w = Fade(z);
+    XMVECTOR faded = Fade(p);
+    XMFLOAT3 fFaded;
+    XMStoreFloat3(&fFaded, faded);
+
+    double u = fFaded.x;
+    double v = fFaded.y;
+    double w = fFaded.z;
 
     int A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z,     // HASH COORDINATES OF
         B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z; // THE 8 CUBE CORNERS,
