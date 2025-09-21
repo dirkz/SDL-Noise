@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace ImprovedNoise
+namespace Improved
 {
 
 constexpr std::array<int, 512> P{
@@ -86,4 +86,4 @@ template <class T> T Noise(T x, T y, T z)
              Lerp(u, Grad(P[AB + 1], x, y - 1, z - 1), Grad(P[BB + 1], x - 1, y - 1, z - 1))));
 }
 
-}; // namespace ImprovedNoise
+}; // namespace Improved
