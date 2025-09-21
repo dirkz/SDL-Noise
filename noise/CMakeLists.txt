@@ -2,7 +2,6 @@ add_library(noise OBJECT
 	"Perlin.h"
 	"Perlin.cpp"
 	"ImprovedNoise.h"
-	"ImprovedNoise.cpp"
 	"NoiseDX.h"
 	"NoiseDX.cpp")
 
