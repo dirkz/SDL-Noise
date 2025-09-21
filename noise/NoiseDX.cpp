@@ -93,6 +93,24 @@ double NoiseDX::Grad(int hash, double x, double y, double z)
     return Grad(hash, point);
 }
 
+double NoiseDX::Grad0(int hash, double x, double y, double z)
+{
+    int h = hash & 15;        // CONVERT LO 4 BITS OF HASH CODE
+    double u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
+        v = h < 4                ? y
+            : h == 12 || h == 14 ? x
+                                 : z;
+    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+}
+
+double NoiseDX::Grad0(int hash, DirectX::FXMVECTOR v)
+{
+    XMFLOAT3 fs;
+    XMStoreFloat3(&fs, v);
+
+    return Grad0(hash, fs.x, fs.y, fs.z);
+}
+
 double NoiseDX::Noise(double x, double y, double z)
 {
     XMVECTOR p =
@@ -126,12 +144,12 @@ double NoiseDX::Noise(double x, double y, double z)
     return Lerp(
         w,
         Lerp(v,
-             Lerp(u, Grad(P[AA], x, y, z),        // AND ADD
-                  Grad(P[BA], x - 1, y, z)),      // BLENDED
-             Lerp(u, Grad(P[AB], x, y - 1, z),    // RESULTS
-                  Grad(P[BB], x - 1, y - 1, z))), // FROM  8
+             Lerp(u, Grad0(P[AA], x, y, z),        // AND ADD
+                  Grad0(P[BA], x - 1, y, z)),      // BLENDED
+             Lerp(u, Grad0(P[AB], x, y - 1, z),    // RESULTS
+                  Grad0(P[BB], x - 1, y - 1, z))), // FROM  8
         Lerp(v,
-             Lerp(u, Grad(P[AA + 1], x, y, z - 1),   // CORNERS
-                  Grad(P[BA + 1], x - 1, y, z - 1)), // OF CUBE
-             Lerp(u, Grad(P[AB + 1], x, y - 1, z - 1), Grad(P[BB + 1], x - 1, y - 1, z - 1))));
+             Lerp(u, Grad0(P[AA + 1], x, y, z - 1),   // CORNERS
+                  Grad0(P[BA + 1], x - 1, y, z - 1)), // OF CUBE
+             Lerp(u, Grad0(P[AB + 1], x, y - 1, z - 1), Grad0(P[BB + 1], x - 1, y - 1, z - 1))));
 }

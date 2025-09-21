@@ -16,6 +16,9 @@ struct NoiseDX
 
     static DirectX::XMVECTOR Fade(DirectX::FXMVECTOR t);
 
+    static double Grad0(int hash, double x, double y, double z);
+    static double Grad0(int hash, DirectX::FXMVECTOR v);
+
     static double Grad(int hash, DirectX::FXMVECTOR v);
     static double Grad(int hash, double x, double y, double z);
 
