@@ -141,15 +141,23 @@ double NoiseDX::Noise(double x, double y, double z)
     int A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z,     // HASH COORDINATES OF
         B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z; // THE 8 CUBE CORNERS,
 
-    return Lerp(
-        w,
-        Lerp(v,
-             Lerp(u, Grad0(P[AA], x, y, z),        // AND ADD
-                  Grad0(P[BA], x - 1, y, z)),      // BLENDED
-             Lerp(u, Grad0(P[AB], x, y - 1, z),    // RESULTS
-                  Grad0(P[BB], x - 1, y - 1, z))), // FROM  8
-        Lerp(v,
-             Lerp(u, Grad0(P[AA + 1], x, y, z - 1),   // CORNERS
-                  Grad0(P[BA + 1], x - 1, y, z - 1)), // OF CUBE
-             Lerp(u, Grad0(P[AB + 1], x, y - 1, z - 1), Grad0(P[BB + 1], x - 1, y - 1, z - 1))));
+    const XMVECTOR MinusX = XMVectorSet(-1, 0, 0, 0);
+    const XMVECTOR MinusY = XMVectorSet(0, -1, 0, 0);
+    const XMVECTOR MinusXY = XMVectorSet(-1, -1, 0, 0);
+    const XMVECTOR MinusZ = XMVectorSet(0, 0, -1, 0);
+    const XMVECTOR MinusXZ = XMVectorSet(-1, 0, -1, 0);
+    const XMVECTOR MinusYZ = XMVectorSet(0, -1, -1, 0);
+    const XMVECTOR MinusXYZ = XMVectorSet(-1, -1, -1, 0);
+
+    return Lerp(w,
+                Lerp(v,
+                     Lerp(u, Grad0(P[AA], p),                      // AND ADD
+                          Grad0(P[BA], XMVectorAdd(p, MinusX))),   // BLENDED
+                     Lerp(u, Grad0(P[AB], XMVectorAdd(p, MinusY)), // RESULTS
+                          Grad0(P[BB], XMVectorAdd(p, MinusXY)))), // FROM  8
+                Lerp(v,
+                     Lerp(u, Grad0(P[AA + 1], XMVectorAdd(p, MinusZ)), // CORNERS
+                          Grad0(P[BA + 1], XMVectorAdd(p, MinusXZ))),  // OF CUBE
+                     Lerp(u, Grad0(P[AB + 1], XMVectorAdd(p, MinusYZ)),
+                          Grad0(P[BB + 1], XMVectorAdd(p, MinusXYZ)))));
 }
