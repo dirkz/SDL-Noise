@@ -1,5 +1,7 @@
 #include "NoiseDX.h"
 
+#include "ImprovedNoise.h"
+
 namespace NoiseDX
 {
 
@@ -158,17 +160,19 @@ float Noise(float x, float y, float z)
     const XMVECTOR MinusYZ = XMVectorSet(0, -1, -1, 0);
     const XMVECTOR MinusXYZ = XMVectorSet(-1, -1, -1, 0);
 
-    return Lerp(w,
-                Lerp(v,
-                     Lerp(u, Grad0(P[AA], p),                      // AND ADD
-                          Grad0(P[BA], XMVectorAdd(p, MinusX))),   // BLENDED
-                     Lerp(u, Grad0(P[AB], XMVectorAdd(p, MinusY)), // RESULTS
-                          Grad0(P[BB], XMVectorAdd(p, MinusXY)))), // FROM  8
-                Lerp(v,
-                     Lerp(u, Grad0(P[AA + 1], XMVectorAdd(p, MinusZ)), // CORNERS
-                          Grad0(P[BA + 1], XMVectorAdd(p, MinusXZ))),  // OF CUBE
-                     Lerp(u, Grad0(P[AB + 1], XMVectorAdd(p, MinusYZ)),
-                          Grad0(P[BB + 1], XMVectorAdd(p, MinusXYZ)))));
+    return ImprovedNoise::Lerp(
+        w,
+        ImprovedNoise::Lerp(v,
+                            ImprovedNoise::Lerp(u, Grad0(P[AA], p),                      // AND ADD
+                                                Grad0(P[BA], XMVectorAdd(p, MinusX))),   // BLENDED
+                            ImprovedNoise::Lerp(u, Grad0(P[AB], XMVectorAdd(p, MinusY)), // RESULTS
+                                                Grad0(P[BB], XMVectorAdd(p, MinusXY)))), // FROM  8
+        ImprovedNoise::Lerp(
+            v,
+            ImprovedNoise::Lerp(u, Grad0(P[AA + 1], XMVectorAdd(p, MinusZ)), // CORNERS
+                                Grad0(P[BA + 1], XMVectorAdd(p, MinusXZ))),  // OF CUBE
+            ImprovedNoise::Lerp(u, Grad0(P[AB + 1], XMVectorAdd(p, MinusYZ)),
+                                Grad0(P[BB + 1], XMVectorAdd(p, MinusXYZ)))));
 }
 
 } // namespace NoiseDX
