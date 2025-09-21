@@ -2,7 +2,7 @@
 
 using namespace DirectX;
 
-constexpr bool OriginalGradients = false;
+constexpr bool OriginalGradients = true;
 
 constexpr std::array<int, 512> P{
     151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,   225, 140, 36,  103,
@@ -76,7 +76,7 @@ DirectX::XMVECTOR NoiseDX::Fade(DirectX::FXMVECTOR t)
     return v;
 }
 
-double NoiseDX::Grad(int hash, DirectX::FXMVECTOR v)
+float NoiseDX::Grad(int hash, DirectX::FXMVECTOR v)
 {
     int h = hash & 15;
     XMVECTOR gradient = Gradients[h];
@@ -84,10 +84,10 @@ double NoiseDX::Grad(int hash, DirectX::FXMVECTOR v)
     XMVECTOR d = XMVector3Dot(gradient, v);
     float g = XMVectorGetX(d);
 
-    return static_cast<double>(g);
+    return g;
 }
 
-double NoiseDX::Grad(int hash, double x, double y, double z)
+float NoiseDX::Grad(int hash, float x, float y, float z)
 {
     XMVECTOR point =
         XMVectorSet(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), PointW);
@@ -95,17 +95,17 @@ double NoiseDX::Grad(int hash, double x, double y, double z)
     return Grad(hash, point);
 }
 
-double NoiseDX::Grad0(int hash, double x, double y, double z)
+float NoiseDX::Grad0(int hash, float x, float y, float z)
 {
-    int h = hash & 15;        // CONVERT LO 4 BITS OF HASH CODE
-    double u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
+    int h = hash & 15;       // CONVERT LO 4 BITS OF HASH CODE
+    float u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
         v = h < 4                ? y
             : h == 12 || h == 14 ? x
                                  : z;
     return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
 
-double NoiseDX::Grad0(int hash, DirectX::FXMVECTOR v)
+float NoiseDX::Grad0(int hash, DirectX::FXMVECTOR v)
 {
     if (OriginalGradients)
     {
@@ -120,7 +120,7 @@ double NoiseDX::Grad0(int hash, DirectX::FXMVECTOR v)
     }
 }
 
-double NoiseDX::Noise(double x, double y, double z)
+float NoiseDX::Noise(float x, float y, float z)
 {
     XMVECTOR p =
         XMVectorSet(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), PointW);
@@ -140,9 +140,9 @@ double NoiseDX::Noise(double x, double y, double z)
     XMFLOAT3 fFaded;
     XMStoreFloat3(&fFaded, faded);
 
-    double u = fFaded.x;
-    double v = fFaded.y;
-    double w = fFaded.z;
+    float u = fFaded.x;
+    float v = fFaded.y;
+    float w = fFaded.z;
 
     int A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z,     // HASH COORDINATES OF
         B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z; // THE 8 CUBE CORNERS,

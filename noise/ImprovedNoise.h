@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-struct ImprovedNoise
+template <class T> struct ImprovedNoise
 {
     inline static const std::array<int, 512> P{
         151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,   225, 140, 36,
@@ -37,17 +37,17 @@ struct ImprovedNoise
         215, 61,  156, 180, // mirror of first 256
     };
 
-    template <class T> static T Fade(T t)
+    static T Fade(T t)
     {
         return t * t * t * (t * (t * T{6} - T{15}) + T{10});
     }
 
-    template <class T> static T Lerp(T t, T a, T b)
+    static T Lerp(T t, T a, T b)
     {
         return a + t * (b - a);
     }
 
-    template <class T> static T Grad(int hash, T x, T y, T z)
+    static T Grad(int hash, T x, T y, T z)
     {
         int h = hash & 15;   // CONVERT LO 4 BITS OF HASH CODE
         T u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
@@ -57,7 +57,7 @@ struct ImprovedNoise
         return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
     }
 
-    static double Noise(double x, double y, double z)
+    static T Noise(T x, T y, T z)
     {
         int X = static_cast<int>(std::floor(x)) & 255, // FIND UNIT CUBE THAT
             Y = static_cast<int>(std::floor(y)) & 255, // CONTAINS POINT.
@@ -67,8 +67,8 @@ struct ImprovedNoise
         y -= std::floor(y); // OF POINT IN CUBE.
         z -= std::floor(z);
 
-        double u = Fade(x), // COMPUTE FADE CURVES
-            v = Fade(y),    // FOR EACH OF X,Y,Z.
+        T u = Fade(x),   // COMPUTE FADE CURVES
+            v = Fade(y), // FOR EACH OF X,Y,Z.
             w = Fade(z);
 
         int A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z,     // HASH COORDINATES OF
