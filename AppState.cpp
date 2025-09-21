@@ -74,14 +74,14 @@ template <class N, class T> void RunNoise(const N &noise, T frequency, int width
     }
 }
 
-template <class T> void Measure(std::string &what, const T &fn)
+template <class T> void Measure(const char *what, const T &fn)
 {
     auto begin = std::chrono::high_resolution_clock::now();
     fn();
     auto end = std::chrono::high_resolution_clock::now();
 
     auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
-    SDL_Log("%s: %d", what.c_str(), elapsed);
+    SDL_Log("*** %s: %d", what, static_cast<int>(elapsed));
 }
 
 AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
@@ -90,20 +90,30 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
     sdl::Init(SDL_INIT_VIDEO);
     sdl::CreateWindowAndRenderer("SDL-Noise", WindowWidth, WindowHeight, 0, &m_window, &m_renderer);
 
-    auto improvedNoise = [](float x, float y, float z) { return ImprovedNoise::Noise(x, y, z); };
+    auto improvedNoiseFloat = [](float x, float y, float z) {
+        return ImprovedNoise::Noise(x, y, z);
+    };
     auto noiseDX = [](float x, float y, float z) { return NoiseDX::Noise(x, y, z); };
 
-    m_texture1 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoise);
+    m_texture1 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoiseFloat);
     m_texture2 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, noiseDX);
 
-    constexpr float frequency = 1.f / 64.f;
+    constexpr float frequency = 1.f / 64;
     constexpr int width = 1024;
     constexpr int height = 1024;
-    auto runImprovedNoise = [&improvedNoise]() {
-        RunNoise(improvedNoise, frequency, width, height);
+    auto improvedNoiseDouble = [](double x, double y, double z) {
+        return ImprovedNoise::Noise(x, y, z);
+    };
+    auto runImprovedNoiseFloat = [&improvedNoiseFloat]() {
+        RunNoise(improvedNoiseFloat, frequency, width, height);
+    };
+    auto runImprovedNoiseDouble = [&improvedNoiseDouble]() {
+        RunNoise(improvedNoiseDouble, static_cast<double>(frequency), width, height);
     };
     auto runNoiseDX = [&noiseDX]() { RunNoise(noiseDX, frequency, width, height); };
-    Measure(std::string{"ImprovedNoise<float>"}, []() { return; });
+    Measure("ImprovedNoise<float>", runImprovedNoiseFloat);
+    Measure("ImprovedNoise<double>", runImprovedNoiseDouble);
+    Measure("NoiseDX", runNoiseDX);
 }
 
 void AppState::Iterate()
