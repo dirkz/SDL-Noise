@@ -53,6 +53,27 @@ static const std::array<XMVECTOR, 16> Gradients{
     XMVectorSet(GradientMinus, GradientPlus, 0, VectorW),
 };
 
+DirectX::XMVECTOR NoiseDX::Fade(DirectX::XMVECTOR t)
+{
+    // t * T{6}
+    XMVECTOR v = XMVectorMultiply(t, XMVectorReplicate(6));
+
+    // t * T{6} - T{15}
+    v = XMVectorSubtract(v, XMVectorReplicate(15));
+
+    // t * (t * T{6} - T{15})
+    v = XMVectorMultiply(t, v);
+
+    // t * (t * T{6} - T{15}) + T{10}
+    v = XMVectorAdd(v, XMVectorReplicate(10));
+
+    v = XMVectorMultiply(v, t);
+    v = XMVectorMultiply(v, t);
+    v = XMVectorMultiply(v, t);
+
+    return v;
+}
+
 double NoiseDX::Grad(int hash, double x, double y, double z)
 {
     int h = hash & 15;
@@ -80,6 +101,8 @@ double NoiseDX::Noise(double x, double y, double z)
     int X = static_cast<int>(fFloor.x) & 255, // FIND UNIT CUBE THAT
         Y = static_cast<int>(fFloor.y) & 255, // CONTAINS POINT.
         Z = static_cast<int>(fFloor.z) & 255;
+
+    p = XMVectorSubtract(p, pFloor);
 
     x -= std::floor(x); // FIND RELATIVE X,Y,Z
     y -= std::floor(y); // OF POINT IN CUBE.
