@@ -53,7 +53,7 @@ static const std::array<XMVECTOR, 16> Gradients{
     XMVectorSet(GradientMinus, GradientPlus, 0, VectorW),
 };
 
-DirectX::XMVECTOR NoiseDX::Fade(DirectX::XMVECTOR t)
+DirectX::XMVECTOR NoiseDX::Fade(DirectX::FXMVECTOR t)
 {
     // t * T{6}
     XMVECTOR v = XMVectorMultiply(t, XMVectorReplicate(6));
@@ -74,19 +74,23 @@ DirectX::XMVECTOR NoiseDX::Fade(DirectX::XMVECTOR t)
     return v;
 }
 
-double NoiseDX::Grad(int hash, double x, double y, double z)
+double NoiseDX::Grad(int hash, DirectX::FXMVECTOR v)
 {
     int h = hash & 15;
-
     XMVECTOR gradient = Gradients[h];
+
+    XMVECTOR d = XMVector3Dot(gradient, v);
+    float g = XMVectorGetX(d);
+
+    return static_cast<double>(g);
+}
+
+double NoiseDX::Grad(int hash, double x, double y, double z)
+{
     XMVECTOR point =
         XMVectorSet(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), PointW);
-    XMVECTOR d = XMVector3Dot(gradient, point);
-    float result = XMVectorGetX(d);
 
-    double r2 = static_cast<double>(result);
-
-    return r2;
+    return Grad(hash, point);
 }
 
 double NoiseDX::Noise(double x, double y, double z)
