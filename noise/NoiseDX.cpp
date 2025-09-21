@@ -7,7 +7,7 @@ namespace NoiseDX
 
 using namespace DirectX;
 
-constexpr bool OriginalGradients = true;
+constexpr bool UseOriginalGradients = true;
 
 constexpr float PointW = 1.f;
 constexpr float VectorW = 0.f;
@@ -81,7 +81,7 @@ float Grad0(int hash, float x, float y, float z)
 
 float Grad0(int hash, DirectX::FXMVECTOR v)
 {
-    if (OriginalGradients)
+    if (UseOriginalGradients)
     {
         XMFLOAT3 fs;
         XMStoreFloat3(&fs, v);
