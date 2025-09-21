@@ -97,23 +97,6 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
 
     m_texture1 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoiseFloat);
     m_texture2 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, noiseDX);
-
-    constexpr float frequency = 1.f / 64;
-    constexpr int width = 1024;
-    constexpr int height = 1024;
-    auto improvedNoiseDouble = [](double x, double y, double z) {
-        return ImprovedNoise::Noise(x, y, z);
-    };
-    auto runImprovedNoiseFloat = [&improvedNoiseFloat]() {
-        RunNoise(improvedNoiseFloat, frequency, width, height);
-    };
-    auto runImprovedNoiseDouble = [&improvedNoiseDouble]() {
-        RunNoise(improvedNoiseDouble, static_cast<double>(frequency), width, height);
-    };
-    auto runNoiseDX = [&noiseDX]() { RunNoise(noiseDX, frequency, width, height); };
-    Measure("ImprovedNoise<float>", runImprovedNoiseFloat);
-    Measure("ImprovedNoise<double>", runImprovedNoiseDouble);
-    Measure("NoiseDX", runNoiseDX);
 }
 
 void AppState::Iterate()
@@ -143,4 +126,32 @@ void AppState::ClearScreen(FXMVECTOR color)
 
     sdl::SetRenderDrawColorFloat(m_renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
     sdl::RenderClear(m_renderer);
+}
+
+void AppState::BenchmarkNoises()
+{
+    auto improvedNoiseFloat = [](float x, float y, float z) {
+        return ImprovedNoise::Noise(x, y, z);
+    };
+    auto noiseDX = [](float x, float y, float z) { return NoiseDX::Noise(x, y, z); };
+
+    auto improvedNoiseDouble = [](double x, double y, double z) {
+        return ImprovedNoise::Noise(x, y, z);
+    };
+
+    constexpr float frequency = 1.f / 64;
+    constexpr int width = 1024;
+    constexpr int height = 1024;
+
+    auto runImprovedNoiseFloat = [&improvedNoiseFloat]() {
+        RunNoise(improvedNoiseFloat, frequency, width, height);
+    };
+    auto runImprovedNoiseDouble = [&improvedNoiseDouble]() {
+        RunNoise(improvedNoiseDouble, static_cast<double>(frequency), width, height);
+    };
+    auto runNoiseDX = [&noiseDX]() { RunNoise(noiseDX, frequency, width, height); };
+
+    Measure("ImprovedNoise<float>", runImprovedNoiseFloat);
+    Measure("ImprovedNoise<double>", runImprovedNoiseDouble);
+    Measure("NoiseDX", runNoiseDX);
 }

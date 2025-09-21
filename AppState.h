@@ -10,6 +10,8 @@ struct AppState
     void ClearScreen(DirectX::FXMVECTOR color);
 
   private:
+    void BenchmarkNoises();
+
     int m_windowWidth = 0;
     int m_windowHeight = 0;
     SDL_Window *m_window = nullptr;
