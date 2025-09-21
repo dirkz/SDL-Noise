@@ -1,5 +1,8 @@
 #include "NoiseDX.h"
 
+namespace NoiseDX
+{
+
 using namespace DirectX;
 
 constexpr bool OriginalGradients = true;
@@ -55,7 +58,7 @@ static const std::array<XMVECTOR, 16> Gradients{
     XMVectorSet(GradientMinus, GradientPlus, 0, VectorW),
 };
 
-DirectX::XMVECTOR NoiseDX::Fade(DirectX::FXMVECTOR t)
+DirectX::XMVECTOR Fade(DirectX::FXMVECTOR t)
 {
     // t * T{6}
     XMVECTOR v = XMVectorMultiply(t, XMVectorReplicate(6));
@@ -76,7 +79,7 @@ DirectX::XMVECTOR NoiseDX::Fade(DirectX::FXMVECTOR t)
     return v;
 }
 
-float NoiseDX::Grad(int hash, DirectX::FXMVECTOR v)
+float Grad(int hash, DirectX::FXMVECTOR v)
 {
     int h = hash & 15;
     XMVECTOR gradient = Gradients[h];
@@ -87,7 +90,7 @@ float NoiseDX::Grad(int hash, DirectX::FXMVECTOR v)
     return g;
 }
 
-float NoiseDX::Grad(int hash, float x, float y, float z)
+float Grad(int hash, float x, float y, float z)
 {
     XMVECTOR point =
         XMVectorSet(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), PointW);
@@ -95,7 +98,7 @@ float NoiseDX::Grad(int hash, float x, float y, float z)
     return Grad(hash, point);
 }
 
-float NoiseDX::Grad0(int hash, float x, float y, float z)
+float Grad0(int hash, float x, float y, float z)
 {
     int h = hash & 15;       // CONVERT LO 4 BITS OF HASH CODE
     float u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
@@ -105,7 +108,7 @@ float NoiseDX::Grad0(int hash, float x, float y, float z)
     return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
 
-float NoiseDX::Grad0(int hash, DirectX::FXMVECTOR v)
+float Grad0(int hash, DirectX::FXMVECTOR v)
 {
     if (OriginalGradients)
     {
@@ -120,7 +123,7 @@ float NoiseDX::Grad0(int hash, DirectX::FXMVECTOR v)
     }
 }
 
-float NoiseDX::Noise(float x, float y, float z)
+float Noise(float x, float y, float z)
 {
     XMVECTOR p =
         XMVectorSet(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), PointW);
@@ -167,3 +170,5 @@ float NoiseDX::Noise(float x, float y, float z)
                      Lerp(u, Grad0(P[AB + 1], XMVectorAdd(p, MinusYZ)),
                           Grad0(P[BB + 1], XMVectorAdd(p, MinusXYZ)))));
 }
+
+} // namespace NoiseDX

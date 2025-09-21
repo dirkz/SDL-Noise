@@ -28,7 +28,7 @@ static void SetPixel(void *pixels, int pitch, int x, int y, FXMVECTOR rgba)
 }
 
 template <class T>
-static SDL_Texture *CreateTexture(SDL_Renderer *renderer, const T &noise, int width, int height)
+static SDL_Texture *CreateTexture(SDL_Renderer *renderer, int width, int height, const T &noise)
 {
     SDL_Surface *surface = sdl::CreateSurface(width, height, SDL_PIXELFORMAT_RGBA8888);
     sdl::Surface surfaceToDelete{surface};
@@ -46,7 +46,7 @@ static SDL_Texture *CreateTexture(SDL_Renderer *renderer, const T &noise, int wi
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            float n = noise.Noise(x, y, 0.5f);
+            float n = noise(x, y, 0.5f);
             n = (n + 1) / 2;
             DirectX::XMVECTOR scale = DirectX::XMVectorReplicate(n);
             DirectX::XMVECTOR color = DirectX::XMColorModulate(baseColor, scale);
@@ -67,11 +67,11 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
     sdl::Init(SDL_INIT_VIDEO);
     sdl::CreateWindowAndRenderer("SDL-Noise", WindowWidth, WindowHeight, 0, &m_window, &m_renderer);
 
-    ImprovedNoise<float> noise1{};
-    NoiseDX noise2{};
-
-    m_texture1 = CreateTexture(m_renderer, noise1, WindowWidth / 2, WindowHeight);
-    m_texture2 = CreateTexture(m_renderer, noise2, WindowWidth / 2, WindowHeight);
+    m_texture1 =
+        CreateTexture(m_renderer, WindowWidth / 2, WindowHeight,
+                      [](float x, float y, float z) { return ImprovedNoise::Noise(x, y, z); });
+    m_texture2 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight,
+                               [](float x, float y, float z) { return NoiseDX::Noise(x, y, z); });
 }
 
 void AppState::Iterate()
