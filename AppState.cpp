@@ -1,7 +1,7 @@
 #include "AppState.h"
 
 #include "ImprovedNoise.h"
-#include "ImprovedNoiseDX.h"
+#include "NoiseDX.h"
 
 using namespace DirectX;
 
@@ -69,7 +69,7 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
     sdl::CreateWindowAndRenderer("SDL-Noise", WindowWidth, WindowHeight, 0, &m_window, &m_renderer);
 
     ImprovedNoise noise1{};
-    ImprovedNoiseDX noise2{};
+    NoiseDX noise2{};
 
     m_texture1 = CreateTexture(m_renderer, noise1, WindowWidth / 2, WindowHeight);
     m_texture2 = CreateTexture(m_renderer, noise2, WindowWidth / 2, WindowHeight);

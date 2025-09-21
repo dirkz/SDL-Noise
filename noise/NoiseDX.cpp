@@ -1,4 +1,4 @@
-#include "ImprovedNoiseDX.h"
+#include "NoiseDX.h"
 
 using namespace DirectX;
 
@@ -53,7 +53,7 @@ static const std::array<XMVECTOR, 16> Gradients{
     XMVectorSet(GradientMinus, GradientPlus, 0, VectorW),
 };
 
-double ImprovedNoiseDX::Grad(int hash, double x, double y, double z)
+double NoiseDX::Grad(int hash, double x, double y, double z)
 {
     int h = hash & 15;
 
@@ -68,7 +68,7 @@ double ImprovedNoiseDX::Grad(int hash, double x, double y, double z)
     return r2;
 }
 
-double ImprovedNoiseDX::Noise(double x, double y, double z)
+double NoiseDX::Noise(double x, double y, double z)
 {
     int X = static_cast<int>(std::floor(x)) & 255, // FIND UNIT CUBE THAT
         Y = static_cast<int>(std::floor(y)) & 255, // CONTAINS POINT.

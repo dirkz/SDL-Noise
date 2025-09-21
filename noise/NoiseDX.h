@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-struct ImprovedNoiseDX
+struct NoiseDX
 {
     template <class T> static T Fade(T t)
     {
