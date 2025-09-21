@@ -70,9 +70,16 @@ double NoiseDX::Grad(int hash, double x, double y, double z)
 
 double NoiseDX::Noise(double x, double y, double z)
 {
-    int X = static_cast<int>(std::floor(x)) & 255, // FIND UNIT CUBE THAT
-        Y = static_cast<int>(std::floor(y)) & 255, // CONTAINS POINT.
-        Z = static_cast<int>(std::floor(z)) & 255;
+    XMVECTOR p =
+        XMVectorSet(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), PointW);
+
+    XMVECTOR pFloor = XMVectorFloor(p);
+    XMFLOAT3 fFloor;
+    XMStoreFloat3(&fFloor, pFloor);
+
+    int X = static_cast<int>(fFloor.x) & 255, // FIND UNIT CUBE THAT
+        Y = static_cast<int>(fFloor.y) & 255, // CONTAINS POINT.
+        Z = static_cast<int>(fFloor.z) & 255;
 
     x -= std::floor(x); // FIND RELATIVE X,Y,Z
     y -= std::floor(y); // OF POINT IN CUBE.
