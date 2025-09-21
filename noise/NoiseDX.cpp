@@ -2,6 +2,8 @@
 
 using namespace DirectX;
 
+constexpr bool OriginalGradients = false;
+
 constexpr std::array<int, 512> P{
     151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,   225, 140, 36,  103,
     30,  69,  142, 8,   99,  37,  240, 21,  10,  23,  190, 6,   148, 247, 120, 234, 75,  0,   26,
@@ -105,10 +107,17 @@ double NoiseDX::Grad0(int hash, double x, double y, double z)
 
 double NoiseDX::Grad0(int hash, DirectX::FXMVECTOR v)
 {
-    XMFLOAT3 fs;
-    XMStoreFloat3(&fs, v);
+    if (OriginalGradients)
+    {
+        XMFLOAT3 fs;
+        XMStoreFloat3(&fs, v);
 
-    return Grad0(hash, fs.x, fs.y, fs.z);
+        return Grad0(hash, fs.x, fs.y, fs.z);
+    }
+    else
+    {
+        return Grad(hash, v);
+    }
 }
 
 double NoiseDX::Noise(double x, double y, double z)

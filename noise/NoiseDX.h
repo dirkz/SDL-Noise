@@ -16,10 +16,16 @@ struct NoiseDX
 
     static DirectX::XMVECTOR Fade(DirectX::FXMVECTOR t);
 
+    // Original implementation (improved noise)
     static double Grad0(int hash, double x, double y, double z);
+
+    // Will use either the original implementation, or the pure vector one
     static double Grad0(int hash, DirectX::FXMVECTOR v);
 
+    // Pure vector gradients
     static double Grad(int hash, DirectX::FXMVECTOR v);
+
+    // Pure vector gradients, with original interface
     static double Grad(int hash, double x, double y, double z);
 
     static double Noise(double x, double y, double z);
