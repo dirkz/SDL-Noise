@@ -7,7 +7,7 @@ namespace NoiseDX
 
 using namespace DirectX;
 
-constexpr bool UseOriginalGradients = true;
+constexpr bool UseOriginalGradients = false;
 
 constexpr float PointW = 1.f;
 constexpr float VectorW = 0.f;
