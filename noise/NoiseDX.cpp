@@ -124,11 +124,8 @@ double NoiseDX::Noise(double x, double y, double z)
         Y = static_cast<int>(fFloor.y) & 255, // CONTAINS POINT.
         Z = static_cast<int>(fFloor.z) & 255;
 
+    // FIND RELATIVE X,Y,Z OF POINT IN CUBE.
     p = XMVectorSubtract(p, pFloor);
-
-    x -= std::floor(x); // FIND RELATIVE X,Y,Z
-    y -= std::floor(y); // OF POINT IN CUBE.
-    z -= std::floor(z);
 
     XMVECTOR faded = Fade(p);
     XMFLOAT3 fFaded;
