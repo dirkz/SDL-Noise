@@ -46,8 +46,7 @@ static SDL_Texture *CreateTexture(SDL_Renderer *renderer, int width, int height,
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            float n = noise(x, y, 0.5f);
-            n /= 0.5f;
+            float n = (noise(x, y, 0.5f) + 1.f) / 2.f;
             DirectX::XMVECTOR scale = DirectX::XMVectorReplicate(n);
             DirectX::XMVECTOR color = DirectX::XMColorModulate(baseColor, scale);
             SetPixel(surface->pixels, pitch, i, j, color);
@@ -92,7 +91,7 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
 
     auto improvedNoiseFloat = [](float x, float y, float z) { return Improved::Noise(x, y, z); };
 
-    m_texture = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoiseFloat);
+    m_texture = CreateTexture(m_renderer, WindowWidth, WindowHeight, improvedNoiseFloat);
 }
 
 void AppState::Iterate()
