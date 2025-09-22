@@ -46,7 +46,7 @@ static SDL_Texture *CreateTexture(SDL_Renderer *renderer, int width, int height,
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            float n = (noise(x, y, 0.5f) + 1.f) / 2.f;
+            float n = noise(x, y, 0.5f) / 0.5f;
             DirectX::XMVECTOR scale = DirectX::XMVectorReplicate(n);
             DirectX::XMVECTOR color = DirectX::XMColorModulate(baseColor, scale);
             SetPixel(surface->pixels, pitch, i, j, color);
