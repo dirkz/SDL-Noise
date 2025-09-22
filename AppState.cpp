@@ -37,18 +37,21 @@ static SDL_Texture *CreateTexture(SDL_Renderer *renderer, int width, int height,
 
     sdl::LockSurface(surface);
 
-    DirectX::XMVECTORF32 baseColor = DirectX::Colors::CornflowerBlue;
+    XMVECTORF32 color1 = DirectX::Colors::CornflowerBlue;
+    XMVECTORF32 color2 = DirectX::Colors::SandyBrown;
 
-    constexpr float frequency = 1.f / 32.f;
+    constexpr float frequency = 1.f / 64.f;
     for (int i = 0; i < width; ++i)
     {
         for (int j = 0; j < height; ++j)
         {
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
-            float n = noise(x, y, 0.5f) / 0.5f;
-            DirectX::XMVECTOR scale = DirectX::XMVectorReplicate(n);
-            DirectX::XMVECTOR color = DirectX::XMColorModulate(baseColor, scale);
+            float n = noise(x, y, 0.5f);
+            XMVECTOR color = n < 0 ? color1 : color2;
+            XMVECTOR modulator = XMVectorReplicate(n / 4.f);
+            color = XMVectorAdd(color, modulator);
+            color = XMVectorClamp(color, XMVectorReplicate(0), XMVectorReplicate(1));
             SetPixel(surface->pixels, pitch, i, j, color);
         }
     }
