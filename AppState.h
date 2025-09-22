@@ -14,8 +14,9 @@ struct AppState
 
     int m_windowWidth = 0;
     int m_windowHeight = 0;
+
     SDL_Window *m_window = nullptr;
     SDL_Renderer *m_renderer = nullptr;
-    SDL_Texture *m_texture1 = nullptr;
-    SDL_Texture *m_texture2 = nullptr;
+
+    SDL_Texture *m_texture = nullptr;
 };

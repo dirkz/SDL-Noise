@@ -47,7 +47,7 @@ static SDL_Texture *CreateTexture(SDL_Renderer *renderer, int width, int height,
             float x = static_cast<float>(i) * frequency;
             float y = static_cast<float>(j) * frequency;
             float n = noise(x, y, 0.5f);
-            n = (n + 1) / 2;
+            n /= 0.5f;
             DirectX::XMVECTOR scale = DirectX::XMVectorReplicate(n);
             DirectX::XMVECTOR color = DirectX::XMColorModulate(baseColor, scale);
             SetPixel(surface->pixels, pitch, i, j, color);
@@ -91,10 +91,8 @@ AppState::AppState() : m_windowWidth{WindowWidth}, m_windowHeight{WindowHeight}
     sdl::CreateWindowAndRenderer("SDL-Noise", WindowWidth, WindowHeight, 0, &m_window, &m_renderer);
 
     auto improvedNoiseFloat = [](float x, float y, float z) { return Improved::Noise(x, y, z); };
-    auto noiseDX = [](float x, float y, float z) { return DXM::Noise(x, y, z); };
 
-    m_texture1 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoiseFloat);
-    m_texture2 = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, noiseDX);
+    m_texture = CreateTexture(m_renderer, WindowWidth / 2, WindowHeight, improvedNoiseFloat);
 }
 
 void AppState::Iterate()
@@ -102,14 +100,12 @@ void AppState::Iterate()
     Uint64 millis = sdl::GetTicks();
     double seconds = static_cast<double>(millis) / 1000.;
 
-    float halfWidth = static_cast<float>(m_windowWidth) / 2.f;
+    float width = static_cast<float>(m_windowWidth);
     float height = static_cast<float>(m_windowHeight);
 
-    SDL_FRect rect1{.x = 0, .y = 0, .w = halfWidth, .h = height};
-    SDL_FRect rect2{.x = halfWidth, .y = 0, .w = halfWidth, .h = height};
+    SDL_FRect rect{.x = 0, .y = 0, .w = width, .h = height};
 
-    sdl::RenderTexture(m_renderer, m_texture1, nullptr, &rect1);
-    sdl::RenderTexture(m_renderer, m_texture2, nullptr, &rect2);
+    sdl::RenderTexture(m_renderer, m_texture, nullptr, &rect);
 
     sdl::RenderPresent(m_renderer);
 }
